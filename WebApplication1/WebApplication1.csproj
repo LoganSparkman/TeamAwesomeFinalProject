@@ -6,10 +6,32 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20191021155159_startOfNewDb.cs" />
+    <Compile Remove="Data\Migrations\20191021155159_startOfNewDb.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191021155837_FileType_File_Student_StudentType.cs" />
+    <Compile Remove="Data\Migrations\20191021155837_FileType_File_Student_StudentType.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191021160356_UpdatedStudet.cs" />
+    <Compile Remove="Data\Migrations\20191021160356_UpdatedStudet.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191021160444_UpdatedStudentAgain.cs" />
+    <Compile Remove="Data\Migrations\20191021160444_UpdatedStudentAgain.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191021160618_OneMoreTry.cs" />
+    <Compile Remove="Data\Migrations\20191021160618_OneMoreTry.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191021161211_PossibleFix.cs" />
+    <Compile Remove="Data\Migrations\20191021161211_PossibleFix.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191021164212_Student_FileType_File.cs" />
+    <Compile Remove="Data\Migrations\20191021164212_Student_FileType_File.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191021180311_Note.cs" />
+    <Compile Remove="Data\Migrations\20191021180311_Note.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191022235851_Schedule.cs" />
+    <Compile Remove="Data\Migrations\20191022235851_Schedule.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
   </ItemGroup>
 
 </Project>

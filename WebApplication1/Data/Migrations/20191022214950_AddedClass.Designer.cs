@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191022214950_AddedClass")]
+    partial class AddedClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,74 +221,6 @@ namespace WebApplication1.Data.Migrations
                     b.ToTable("ApplicantRating");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Assessment", b =>
-                {
-                    b.Property<int>("AssessmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClassID");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(50000);
-
-                    b.Property<int>("PointsPossible");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.HasKey("AssessmentId");
-
-                    b.HasIndex("ClassID");
-
-                    b.ToTable("Assessment");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Attendance", b =>
-                {
-                    b.Property<int>("AttendaneID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AttendanceStatusID");
-
-                    b.Property<int>("ClassID");
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<int>("StudentID");
-
-                    b.Property<DateTime>("TimeIn");
-
-                    b.Property<DateTime>("TimeOut");
-
-                    b.HasKey("AttendaneID");
-
-                    b.HasIndex("AttendanceStatusID");
-
-                    b.HasIndex("ClassID");
-
-                    b.HasIndex("StudentID");
-
-                    b.ToTable("Attendance");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.AttendanceStatus", b =>
-                {
-                    b.Property<int>("AttendanceStatusID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(250);
-
-                    b.HasKey("AttendanceStatusID");
-
-                    b.ToTable("AttendanceStatus");
-                });
-
             modelBuilder.Entity("WebApplication1.Models.Class", b =>
                 {
                     b.Property<int>("ClassID")
@@ -306,45 +240,6 @@ namespace WebApplication1.Data.Migrations
                     b.HasIndex("TermID");
 
                     b.ToTable("Class");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.ClassInstructor", b =>
-                {
-                    b.Property<int>("ClassInstructorID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClassID");
-
-                    b.Property<string>("UserID")
-                        .IsRequired();
-
-                    b.HasKey("ClassInstructorID");
-
-                    b.HasIndex("ClassID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("ClassInstructor");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.ClassSchedule", b =>
-                {
-                    b.Property<int>("ClassScheduleID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClassID");
-
-                    b.Property<int>("ScheduleID");
-
-                    b.HasKey("ClassScheduleID");
-
-                    b.HasIndex("ClassID");
-
-                    b.HasIndex("ScheduleID");
-
-                    b.ToTable("ClassSchedule");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Course", b =>
@@ -442,25 +337,6 @@ namespace WebApplication1.Data.Migrations
                     b.ToTable("NoteType");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.PublicSchoolClassSchedule", b =>
-                {
-                    b.Property<int>("PublicSchoolClassScheduleID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ScheduleID");
-
-                    b.Property<int>("StudentPublicSchoolClassID");
-
-                    b.HasKey("PublicSchoolClassScheduleID");
-
-                    b.HasIndex("ScheduleID");
-
-                    b.HasIndex("StudentPublicSchoolClassID");
-
-                    b.ToTable("PublicSchoolClassSchedule");
-                });
-
             modelBuilder.Entity("WebApplication1.Models.RatingCriterium", b =>
                 {
                     b.Property<int>("RatingCriteriumID")
@@ -476,23 +352,6 @@ namespace WebApplication1.Data.Migrations
                     b.HasKey("RatingCriteriumID");
 
                     b.ToTable("RatingCriterium");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Schedule", b =>
-                {
-                    b.Property<int>("ScheduleID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<short>("DayOfWeek");
-
-                    b.Property<DateTime>("EndTime");
-
-                    b.Property<DateTime>("StartTime");
-
-                    b.HasKey("ScheduleID");
-
-                    b.ToTable("Schedule");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Student", b =>
@@ -544,69 +403,6 @@ namespace WebApplication1.Data.Migrations
                     b.HasIndex("StudentStatusID");
 
                     b.ToTable("Student");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.StudentAssessment", b =>
-                {
-                    b.Property<int>("StudentAssessmentID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AssessmentID");
-
-                    b.Property<int>("AssessnentID");
-
-                    b.Property<string>("Comment")
-                        .HasMaxLength(5000);
-
-                    b.Property<int>("PointsAwarded");
-
-                    b.Property<int>("StudentID");
-
-                    b.HasKey("StudentAssessmentID");
-
-                    b.HasIndex("AssessmentID");
-
-                    b.HasIndex("StudentID");
-
-                    b.ToTable("StudentAssessment");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.StudentClass", b =>
-                {
-                    b.Property<int>("StudentClassID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClassID");
-
-                    b.Property<int>("StudentID");
-
-                    b.HasKey("StudentClassID");
-
-                    b.HasIndex("ClassID");
-
-                    b.HasIndex("StudentID");
-
-                    b.ToTable("StudentClass");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.StudentPublicSchoolClass", b =>
-                {
-                    b.Property<int>("StudentPublicSchoolClassID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CourseName")
-                        .HasMaxLength(500);
-
-                    b.Property<int>("StudentID");
-
-                    b.HasKey("StudentPublicSchoolClassID");
-
-                    b.HasIndex("StudentID");
-
-                    b.ToTable("StudentPublicSchoolClass");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.StudentStatus", b =>
@@ -712,32 +508,6 @@ namespace WebApplication1.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Assessment", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Class", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Attendance", b =>
-                {
-                    b.HasOne("WebApplication1.Models.AttendanceStatus", "AttendanceStatus")
-                        .WithMany()
-                        .HasForeignKey("AttendanceStatusID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WebApplication1.Models.Class", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WebApplication1.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("WebApplication1.Models.Class", b =>
                 {
                     b.HasOne("WebApplication1.Models.Course", "Course")
@@ -748,32 +518,6 @@ namespace WebApplication1.Data.Migrations
                     b.HasOne("WebApplication1.Models.Term", "Term")
                         .WithMany()
                         .HasForeignKey("TermID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.ClassInstructor", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Class", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.ClassSchedule", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Class", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WebApplication1.Models.Schedule", "Schedule")
-                        .WithMany()
-                        .HasForeignKey("ScheduleID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -808,57 +552,11 @@ namespace WebApplication1.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.PublicSchoolClassSchedule", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Schedule", "Schedule")
-                        .WithMany()
-                        .HasForeignKey("ScheduleID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WebApplication1.Models.StudentPublicSchoolClass", "StudentPublicSchoolClass")
-                        .WithMany()
-                        .HasForeignKey("StudentPublicSchoolClassID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("WebApplication1.Models.Student", b =>
                 {
                     b.HasOne("WebApplication1.Models.StudentStatus", "StudentStatus")
                         .WithMany()
                         .HasForeignKey("StudentStatusID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.StudentAssessment", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Assessment", "Assessment")
-                        .WithMany()
-                        .HasForeignKey("AssessmentID");
-
-                    b.HasOne("WebApplication1.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.StudentClass", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Class", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WebApplication1.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.StudentPublicSchoolClass", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

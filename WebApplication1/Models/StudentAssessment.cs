@@ -7,25 +7,26 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models
 {
-    public class Grade
+    public class StudentAssessment
     {
         [Key]
-        public int Id { get; set; }
+        public int StudentAssessmentID { get; set; }
         [Required]
-        public int Score { get; set; }
+        public int PointsAwarded { get; set; }
+        [StringLength(5000)]
+        public string Comment { get; set; }
 
-        [Required]
         [Display(Name = "Assessment")]
-        public int AssessmentId { get; set; }
-
-        [ForeignKey("AssessmentId")]
+        [Required]
+        public int AssessnentID { get; set; }
+        [ForeignKey("AssessmentID")]
         public virtual Assessment Assessment { get; set; }
 
-        [Required]
         [Display(Name = "Student")]
-        public int StudentId { get; set; }
-
-        [ForeignKey("StudentId")]
+        [Required]
+        public int StudentID { get; set; }
+        [ForeignKey("StudentID")]
         public virtual Student Student { get; set; }
     }
+    
 }

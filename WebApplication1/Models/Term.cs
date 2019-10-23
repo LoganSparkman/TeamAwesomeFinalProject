@@ -9,15 +9,18 @@ namespace WebApplication1.Models
     public class Term
     {
         [Key]
-        public int Id { get; set; }
-
+        public int TermID { get; set; }
+        [StringLength(500)]
+        
+        public string Description { get; set; }
+        [Display(Name = "Start Date")]
         [Required]
-        public DateTime TermStart  { get; set; }
-
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime StartDate { get; set; }
+        [Display(Name = "End Date")]
         [Required]
-        public DateTime TermEnd { get; set; }
-
-        [Display(Name = "Term")]
-        public string TermName { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime EndDate { get; set; }
+        public Int16 TimeOfYear { get; set; }
     }
 }
