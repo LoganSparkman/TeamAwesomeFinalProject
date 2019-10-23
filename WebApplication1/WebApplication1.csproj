@@ -25,6 +25,14 @@
     <Compile Remove="Data\Migrations\20191021180311_Note.Designer.cs" />
     <Compile Remove="Data\Migrations\20191022235851_Schedule.cs" />
     <Compile Remove="Data\Migrations\20191022235851_Schedule.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191023000050_Schedule.cs" />
+    <Compile Remove="Data\Migrations\20191023000050_Schedule.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191023221322_TEST.cs" />
+    <Compile Remove="Data\Migrations\20191023221322_TEST.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191023221428_Test.cs" />
+    <Compile Remove="Data\Migrations\20191023221428_Test.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191023221525_Test.cs" />
+    <Compile Remove="Data\Migrations\20191023221525_Test.Designer.cs" />
   </ItemGroup>
 
 

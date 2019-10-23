@@ -13,8 +13,10 @@ namespace WebApplication1.Models
         [Required]
         public Int16 DayOfWeek { get; set; }
         [Required]
+        [DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
         public DateTime StartTime { get; set; }
         [Required]
+        [DisplayFormat(DataFormatString = "{0:HH:mm:ss}", ApplyFormatInEditMode = true)]
         public DateTime EndTime { get; set; }
     }
 }

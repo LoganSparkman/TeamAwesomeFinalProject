@@ -9,8 +9,7 @@ namespace WebApplication1.Models
 {
     public class StudentAssessment
     {
-        [Key]
-        public int StudentAssessmentID { get; set; }
+
         [Required]
         public int PointsAwarded { get; set; }
         [StringLength(5000)]

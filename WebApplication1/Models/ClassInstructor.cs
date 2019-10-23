@@ -10,8 +10,6 @@ namespace WebApplication1.Models
 {
     public class ClassInstructor
     {
-        [Key]
-        public int ClassInstructorID { get; set; }
         //FKs to Primary Key Below
 
         [Display(Name = "Class")]

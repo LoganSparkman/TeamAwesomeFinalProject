@@ -16,9 +16,10 @@ namespace WebApplication1.Models
         public int ScoreAssigned { get; set; }
         [Required]
         public DateTime DateTime { get; set; }
-        [StringLength(1000)]
+        [StringLength(5000)]
         public string Comment { get; set; }
         //FKs below
+
         [Display(Name = "Student")]
         [Required]
         public int StudentID { get; set; }

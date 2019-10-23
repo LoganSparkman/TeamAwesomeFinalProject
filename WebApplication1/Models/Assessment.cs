@@ -11,7 +11,7 @@ namespace WebApplication1.Models
     {
         [Key]
         public int AssessmentId { get; set; }
-        [StringLength(100)]
+        [StringLength(500)]
         [Required]
         public string Title { get; set; }
         [StringLength(50000)]

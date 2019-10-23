@@ -9,8 +9,7 @@ namespace WebApplication1.Models
 {
     public class StudentClass
     {
-        [Key]
-        public int StudentClassID { get; set; }
+
 
 
         [Display(Name = "Class")]

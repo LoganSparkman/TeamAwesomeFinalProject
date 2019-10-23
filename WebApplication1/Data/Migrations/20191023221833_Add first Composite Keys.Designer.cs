@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191023221833_Add first Composite Keys")]
+    partial class AddfirstCompositeKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,7 +193,7 @@ namespace WebApplication1.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Comment")
-                        .HasMaxLength(5000);
+                        .HasMaxLength(1000);
 
                     b.Property<DateTime>("DateTime");
 
@@ -234,7 +236,7 @@ namespace WebApplication1.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(500);
+                        .HasMaxLength(100);
 
                     b.HasKey("AssessmentId");
 
@@ -245,21 +247,27 @@ namespace WebApplication1.Data.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Attendance", b =>
                 {
-                    b.Property<int>("ClassID");
+                    b.Property<int>("AttendaneID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("StudentID");
+                    b.Property<int>("AttendanceStatusID");
+
+                    b.Property<int>("ClassID");
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<int>("AttendanceStatusID");
+                    b.Property<int>("StudentID");
 
                     b.Property<DateTime>("TimeIn");
 
                     b.Property<DateTime>("TimeOut");
 
-                    b.HasKey("ClassID", "StudentID", "Date");
+                    b.HasKey("AttendaneID");
 
                     b.HasIndex("AttendanceStatusID");
+
+                    b.HasIndex("ClassID");
 
                     b.HasIndex("StudentID");
 
@@ -317,11 +325,17 @@ namespace WebApplication1.Data.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.ClassSchedule", b =>
                 {
+                    b.Property<int>("ClassScheduleID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<int>("ClassID");
 
                     b.Property<int>("ScheduleID");
 
-                    b.HasKey("ClassID", "ScheduleID");
+                    b.HasKey("ClassScheduleID");
+
+                    b.HasIndex("ClassID");
 
                     b.HasIndex("ScheduleID");
 
@@ -336,7 +350,7 @@ namespace WebApplication1.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(500);
+                        .HasMaxLength(100);
 
                     b.HasKey("CourseID");
 
@@ -416,7 +430,7 @@ namespace WebApplication1.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(500);
+                        .HasMaxLength(50);
 
                     b.HasKey("NoteTypeID");
 
@@ -529,20 +543,26 @@ namespace WebApplication1.Data.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.StudentAssessment", b =>
                 {
-                    b.Property<int>("StudentID");
-
-                    b.Property<int>("AssessnentID");
+                    b.Property<int>("StudentAssessmentID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("AssessmentID");
+
+                    b.Property<int>("AssessnentID");
 
                     b.Property<string>("Comment")
                         .HasMaxLength(5000);
 
                     b.Property<int>("PointsAwarded");
 
-                    b.HasKey("StudentID", "AssessnentID");
+                    b.Property<int>("StudentID");
+
+                    b.HasKey("StudentAssessmentID");
 
                     b.HasIndex("AssessmentID");
+
+                    b.HasIndex("StudentID");
 
                     b.ToTable("StudentAssessment");
                 });
@@ -600,7 +620,7 @@ namespace WebApplication1.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasMaxLength(5000);
+                        .HasMaxLength(500);
 
                     b.Property<DateTime>("EndDate");
 

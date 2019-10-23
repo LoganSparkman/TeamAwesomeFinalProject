@@ -39,33 +39,25 @@ namespace WebApplication1.Data
 
         //Below is an attempt at creating tables using FKs as PKs. This should be possible, but it is nessesary to know
         //All of the classes in the Identity framework, and the DB tables. If this is known, then we can add FKPK tables.
-        /*
+        
+            
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //Must add in Identity
-            modelBuilder.Entity<IdentityUser>().ToTable("AspNetUsers")
+            //Call Base OnModelCreating
+            base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Student>().ToTable("Student");
-            modelBuilder.Entity<FileType>().ToTable("FileType");
-            modelBuilder.Entity<File>().ToTable("File");
-            modelBuilder.Entity<StudentStatus>().ToTable("StudentStatus");
-            modelBuilder.Entity<Note>().ToTable("Note");
-            modelBuilder.Entity<NoteType>().ToTable("NoteType");
-            modelBuilder.Entity<Term>().ToTable("Term");
-            modelBuilder.Entity<RatingCriterium>().ToTable("RatingCriterium");
-            modelBuilder.Entity<ApplicantRating>().ToTable("ApplicantRating");
-            modelBuilder.Entity<Course>().ToTable("Course");
-            modelBuilder.Entity<Class>().ToTable("Class");
-            /*
-            modelBuilder.Entity<ClassInstructor>().ToTable("ClassInstructor");
-            modelBuilder.Entity<StudentClass>().ToTable("StudentClass");
-
-            //Below is nessesary when FKs ar PKs
+            //Below is nessesary for composite Keys
             modelBuilder.Entity<ClassInstructor>()
                 .HasKey(c => new { c.ClassID, c.UserID });
             modelBuilder.Entity<StudentClass>()
                 .HasKey(c => new { c.ClassID, c.StudentID });
+            modelBuilder.Entity<Attendance>()
+                .HasKey(c => new { c.ClassID, c.StudentID, c.Date });
+            modelBuilder.Entity<ClassSchedule>()
+                .HasKey(c => new { c.ClassID, c.ScheduleID });
+            modelBuilder.Entity<StudentAssessment>()
+                .HasKey(c => new { c.StudentID, c.AssessnentID });
         }
-        */
+        
     }
 }

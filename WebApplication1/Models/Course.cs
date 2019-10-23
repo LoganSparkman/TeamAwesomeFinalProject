@@ -11,7 +11,7 @@ namespace WebApplication1.Models
         [Key]
         public int CourseID { get; set; }
         [Required]
-        [StringLength(100)]
+        [StringLength(500)]
         public string Name { get; set; }
     }
 }

@@ -9,8 +9,7 @@ namespace WebApplication1.Models
 {
     public class ClassSchedule
     {
-        [Key]
-        public int ClassScheduleID {get; set;}
+        
 
         [Display(Name = "Class")]
         [Required]

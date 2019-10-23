@@ -10,7 +10,7 @@ namespace WebApplication1.Models
     {
         [Key]
         public int TermID { get; set; }
-        [StringLength(500)]
+        [StringLength(5000)]
         
         public string Description { get; set; }
         [Display(Name = "Start Date")]

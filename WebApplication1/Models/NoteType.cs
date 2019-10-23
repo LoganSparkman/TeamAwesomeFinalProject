@@ -12,7 +12,7 @@ namespace WebApplication1.Models
         public int NoteTypeID { get; set; }
         [Required]
         [Display(Name="Note Type Name")]
-        [StringLength(50)]
+        [StringLength(500)]
         public string Name { get; set; }
     }
 }

@@ -10,7 +10,7 @@ using WebApplication1.Data;
 namespace WebApplication1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191023000050_Schedule")]
+    [Migration("20191023221620_Schedule")]
     partial class Schedule
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
