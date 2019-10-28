@@ -13,13 +13,16 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
               crossorigin="anonymous"
-              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"/>
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
     </environment>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/sidebar.css" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <button class="btn btn-primary" id="menu-toggle"><i class="fas fa-bars"></i></button>
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">WebApplication1</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -40,18 +43,32 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2019 - WebApplication1 - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    <div class="d-flex" id="wrapper">
+        <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading">Menu</div>
+            <div class="list-group list-group-flush">
+                <a class="list-group-item list-group-item-action bg-light" asp-area="" asp-page="/Index">Home <i class="fas fa-home" style="position:absolute; right: 15px; top:14px;"></i></a>
+                <a class="list-group-item list-group-item-action bg-light" asp-area="" asp-page="/Index">Students <i class="fas fa-users" style="position:absolute; right: 15px; top:14px;"></i></a>
+                <a class="list-group-item list-group-item-action bg-light" asp-area="" asp-page="/Index">Classes <i class="fas fa-school" style="position:absolute; right: 15px; top:14px;"></i></a>
+                <a class="list-group-item list-group-item-action bg-light" asp-area="" asp-page="/Index">Grades <i class="fas fa-edit" style="position:absolute; right: 15px; top:14px;"></i></a>
+                <a class="list-group-item list-group-item-action bg-light" asp-area="" asp-page="/Index">Terms <i class="far fa-calendar-alt" style="position:absolute; right: 15px; top:14px;"></i></a>
+            </div>
         </div>
-    </footer>
+        <div id="page-content-wrapper">
+            <div class="container">
+                <partial name="_CookieConsentPartial" />
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+
+            <footer class="border-top footer text-muted">
+                <div class="container">
+                    &copy; 2019 - WebApplication1 - <a asp-area="" asp-page="/Privacy">Privacy</a>
+                </div>
+            </footer>
+        </div>
+    </div>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -72,6 +89,12 @@
         </script>
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
 
     @RenderSection("Scripts", required: false)
 </body>
