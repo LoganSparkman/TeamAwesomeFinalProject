@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -21,27 +22,25 @@ namespace WebApplication1.Pages.Students
         }
 
         [BindProperty]
+        public IList<StudentClass> StudentClass { get; set; }
+        [BindProperty]
+        public IList<Class> Class { get; set; }
+        [BindProperty]
         public Student Student { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        public async Task OnGetAsync(int? id)
+        { 
+            Class = await _context.Class
+                .Include(c => c.Course)
+                .Include(t => t.Term).ToListAsync();
 
             Student = await _context.Student
                 .Include(s => s.StudentStatus).FirstOrDefaultAsync(m => m.StudentID == id);
 
-            if (Student == null)
-            {
-                return NotFound();
-            }
-           ViewData["StudentStatusID"] = new SelectList(_context.StudentStatus, "StudentStatusID", "Name");
-            return Page();
+            StudentClass = await _context.StudentClass.ToListAsync();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (!ModelState.IsValid)
             {
