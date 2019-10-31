@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace WebApplication1.Pages.Students
 {
@@ -40,17 +42,15 @@ namespace WebApplication1.Pages.Students
             StudentClass = await _context.StudentClass.ToListAsync();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAdd(int id, int classID)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(Student).State = EntityState.Modified;
-
+            
             try
             {
+                StudentClass StudentClass = new StudentClass();
+                StudentClass.StudentID = id;
+                StudentClass.ClassID = classID;
+                _context.StudentClass.Add(StudentClass);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -65,7 +65,17 @@ namespace WebApplication1.Pages.Students
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./ChangeSchedule", new { id });
+        }
+
+        public async Task<IActionResult> OnPostRemove(int id, int classID)
+        {
+            var StudentClass = await _context.StudentClass.FindAsync(classID, id);
+
+            _context.StudentClass.Remove(StudentClass);
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("./ChangeSchedule", new { id });
         }
 
         private bool StudentExists(int id)
