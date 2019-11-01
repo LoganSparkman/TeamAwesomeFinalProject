@@ -106,6 +106,89 @@
     <a asp-page="./Index">Back to List</a>
 </div>
 
+<table class="table table-bordered" style="table-layout: fixed; width: 100%;">
+    <thead>
+        <tr>
+            <th style="width:9%;" scope="col">Time</th>
+            <th style="width:18%;" scope="col">Monday</th>
+            <th style="width:18%;" scope="col">Tuesday</th>
+            <th style="width:18%;" scope="col">Wednesday</th>
+            <th style="width:18%;" scope="col">Thursday</th>
+            <th style="width:18%;" scope="col">Friday</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            for (int i = 6; i < 18; i++)
+            {
+                <tr>
+                    <th rowspan="2" scope="row">@i:00</th>
+                    <td id="1_@i"></td>
+                    <td id="2_@i"></td>
+                    <td id="3_@i"></td>
+                    <td id="4_@i"></td>
+                    <td id="5_@i"></td>
+
+                </tr>
+                <tr>
+                    <td id="1_2_@i"></td>
+                    <td id="2_2_@i"></td>
+                    <td id="3_2_@i"></td>
+                    <td id="4_2_@i"></td>
+                    <td id="5_2_@i"></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+    $(document).ready(function () {
+        var classSchedules = @Html.Raw(Json.Serialize(Model.classSchedules));
+        classSchedules.forEach(function (classSchedule) {
+            
+            var clas = classSchedule.class;
+            var schedule = classSchedule.schedule;
+            var startTime = new Date(schedule.startTime);
+            var endTime = new Date(schedule.endTime);
+            var dayOfWeek = schedule.dayOfWeek;
+            var rowspan = (endTime.getHours() - startTime.getHours()) * 2;
+
+            if (endTime.getMinutes() > 0) {
+                rowspan++;
+            }
+
+            var node = document.createElement("p");
+            var className = document.createTextNode(clas.course.name);
+
+            node.appendChild(className);
+
+            var element = $('#' + dayOfWeek + '_' + startTime.getHours());
+            element.attr("rowspan", rowspan);
+            element.addClass("table-info");
+            document.getElementById(dayOfWeek + '_' + startTime.getHours()).appendChild(node);
+
+            var elementToDelete = $('#' + dayOfWeek + '_2_' + startTime.getHours());
+            elementToDelete.remove();
+
+            var i = 2;
+            var count = startTime.getHours();
+            while (i < rowspan) {
+                count++;
+                var elementToDelete = $('#' + dayOfWeek + '_' + count);
+                elementToDelete.remove();
+
+                if (i + 2 < rowspan) {
+                    var elementToDelete = $('#' + dayOfWeek + '_2_' + count);
+                    elementToDelete.remove();
+                }
+
+                i++;
+            }
+
+        });
+    });
+</script>
 }

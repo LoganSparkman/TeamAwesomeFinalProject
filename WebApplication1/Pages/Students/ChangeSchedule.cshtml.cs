@@ -30,6 +30,8 @@ namespace WebApplication1.Pages.Students
         [BindProperty]
         public Student Student { get; set; }
 
+        public List<ClassSchedule> classSchedules = new List<ClassSchedule>();
+
         public async Task OnGetAsync(int? id)
         { 
             Class = await _context.Class
@@ -38,6 +40,17 @@ namespace WebApplication1.Pages.Students
 
             Student = await _context.Student
                 .Include(s => s.StudentStatus).FirstOrDefaultAsync(m => m.StudentID == id);
+
+            //classSchedules = await _context.Schedule.ToListAsync();
+            List<int> ClassList = await _context.StudentClass.Where(s => s.StudentID == id).Select(s=>s.ClassID).ToListAsync();
+            foreach(int i in ClassList)
+            {
+                List<ClassSchedule> schedule = await _context.ClassSchedule
+                    .Include(c => c.Schedule)
+                    .Include(c => c.Class)
+                    .Where(c => c.ClassID == i).ToListAsync();
+                classSchedules.AddRange(schedule);
+            }
 
             StudentClass = await _context.StudentClass.ToListAsync();
         }
