@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using WebApplication1.Models;
+using WebApplication1.Utility;
 
 namespace WebApplication1.Areas.Identity.Pages.Account
 {
@@ -19,17 +21,20 @@ namespace WebApplication1.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -39,6 +44,9 @@ namespace WebApplication1.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Required]
+            [StringLength(200, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
+            public string Name { get; set; }
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -66,10 +74,35 @@ namespace WebApplication1.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                var user = new User { UserName = Input.Email, Email = Input.Email, Name = Input.Name};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    //First Time
+                    if (!await _roleManager.RoleExistsAsync(SD.AdminUser))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(SD.AdminUser));
+                        await _userManager.AddToRoleAsync(user, SD.AdminUser);
+                    }
+                    if (!await _roleManager.RoleExistsAsync(SD.InstructorUser))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(SD.InstructorUser));
+                    }
+                    if (!await _roleManager.RoleExistsAsync(SD.CounselorUser))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(SD.CounselorUser));
+                    }
+                    if (!await _roleManager.RoleExistsAsync(SD.RaterUser))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(SD.RaterUser));
+                    }
+                    //Add Instr with below
+                    //await _userManager.AddToRoleAsync(user, SD.InstructorUser);
+                    //Add Rater with below
+                    await _userManager.AddToRoleAsync(user, SD.RaterUser);
+                    //Add Coun with below
+                    await _userManager.AddToRoleAsync(user, SD.CounselorUser);
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

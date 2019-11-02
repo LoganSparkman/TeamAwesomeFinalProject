@@ -36,6 +36,7 @@ namespace WebApplication1.Data
         public DbSet<ClassSchedule> ClassSchedule { get; set; }
         public DbSet<StudentPublicSchoolClass> StudentPublicSchoolClass { get; set; }
         public DbSet<PublicSchoolClassSchedule> PublicSchoolClassSchedule { get; set; }
+        public DbSet<User> User { get; set; }
 
         //Below is an attempt at creating tables using FKs as PKs. This should be possible, but it is nessesary to know
         //All of the classes in the Identity framework, and the DB tables. If this is known, then we can add FKPK tables.
