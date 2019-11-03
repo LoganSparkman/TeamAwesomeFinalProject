@@ -48,10 +48,12 @@ namespace WebApplication1.Pages.Classes
             }
 
             Class = await _context.Class.FindAsync(id);
+            var ClassSchedules = _context.ClassSchedule.Where(c => c.ClassID == id);
 
             if (Class != null)
             {
                 _context.Class.Remove(Class);
+                _context.ClassSchedule.RemoveRange(ClassSchedules);
                 await _context.SaveChangesAsync();
             }
 
