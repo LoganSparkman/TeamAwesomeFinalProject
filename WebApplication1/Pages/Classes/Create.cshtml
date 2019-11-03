@@ -14,17 +14,25 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Class.Capacity" class="control-label"></label>
-                <input asp-for="Class.Capacity" class="form-control" />
-                <span asp-validation-for="Class.Capacity" class="text-danger"></span>
+                <label asp-for="@Model.Class.Capacity" class="control-label"></label>
+                <input asp-for="@Model.Class.Capacity" class="form-control" />
+                <span asp-validation-for="@Model.Class.Capacity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Class.CourseID" class="control-label"></label>
-                <select asp-for="Class.CourseID" class ="form-control" asp-items="ViewBag.CourseID"></select>
+                <label asp-for="@Model.Class.CourseID" class="control-label"></label>
+                <select asp-for="Class.CourseID" class="form-control" asp-items="ViewBag.CourseID"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Class.TermID" class="control-label"></label>
-                <select asp-for="Class.TermID" class ="form-control" asp-items="ViewBag.TermID"></select>
+                <label asp-for="@Model.Class.TermID" class="control-label"></label>
+                <select asp-for="Class.TermID" class="form-control" asp-items="ViewBag.TermID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.FirstDay" class="control-label"></label>
+                <select asp-for="ScheduleFirstDay.ScheduleID" class="form-control" asp-items="ViewBag.ScheduleID"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.SecondDay" class="control-label"></label>
+                <select asp-for="ScheduleSecondDay.ScheduleID" class="form-control" asp-items="ViewBag.ScheduleID"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
