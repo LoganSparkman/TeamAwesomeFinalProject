@@ -16,10 +16,6 @@ namespace WebApplication1.Pages.Classes
         private readonly WebApplication1.Data.ApplicationDbContext _context;
 
         [BindProperty]
-        public IEnumerable<Term> Terms { get; set; }
-        [BindProperty]
-        public IEnumerable<Course> Courses { get; set; }
-        [BindProperty]
         public IList<Schedule> Schedules { get; set; }
         [BindProperty]
         public IList<ScheduleHelper> Schedules2 { get; set; }
