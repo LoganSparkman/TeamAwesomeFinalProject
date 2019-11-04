@@ -38,7 +38,28 @@ namespace WebApplication1.Pages.Classes
             {
                 ScheduleHelper ScheduleHelp = new ScheduleHelper();
                 ScheduleHelp.ScheduleID = Schedule.ScheduleID;
-                ScheduleHelp.ListHelper = Schedule.DayOfWeek.ToString() + " " + Schedule.StartTime.ToString("hh:mm tt");
+                String weekday = "";
+                if(Schedule.DayOfWeek == 1)
+                {
+                    weekday = "Mon";
+                }
+                else if (Schedule.DayOfWeek == 2)
+                {
+                    weekday = "Tue";
+                }
+                else if (Schedule.DayOfWeek == 3)
+                {
+                    weekday = "Wed";
+                }
+                else if (Schedule.DayOfWeek == 4)
+                {
+                    weekday = "Thu";
+                }
+                else if (Schedule.DayOfWeek == 5)
+                {
+                    weekday = "Fri";
+                }
+                ScheduleHelp.ListHelper = weekday + " " + Schedule.StartTime.ToString("hh:mm tt");
                 Schedules2.Add(ScheduleHelp);
             }
 

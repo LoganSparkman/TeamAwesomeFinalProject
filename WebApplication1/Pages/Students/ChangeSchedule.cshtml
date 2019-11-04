@@ -21,9 +21,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Class[0].Term)
             </th>
-            <th>
-                Assigned?
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -53,14 +50,14 @@
                         }
                         @if(Model.Student.StudentID == sc.StudentID && item.ClassID == sc.ClassID)
                         {
-                            <td>Yes</td>
                             enrolled = true;
                             count++;
                         }
+                        /*
                         else if(loopTracker == (classCount-1))
                         {
                             <td>No</td>
-                        }
+                        }*/
                         loopTracker++;
                     }
                 }

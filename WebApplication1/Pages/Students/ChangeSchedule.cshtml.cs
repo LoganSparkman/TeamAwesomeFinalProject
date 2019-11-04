@@ -29,6 +29,8 @@ namespace WebApplication1.Pages.Students
         public IList<Class> Class { get; set; }
         [BindProperty]
         public Student Student { get; set; }
+        [BindProperty]
+        public Class Class2 { get; set; }
 
         public List<ClassSchedule> classSchedules = new List<ClassSchedule>();
 
@@ -60,9 +62,13 @@ namespace WebApplication1.Pages.Students
             
             try
             {
+                Class2 = await _context.Class
+                .FirstOrDefaultAsync(m => m.ClassID == classID);
+                Class2.Capacity--;
                 StudentClass StudentClass = new StudentClass();
                 StudentClass.StudentID = id;
                 StudentClass.ClassID = classID;
+                _context.Class.Update(Class2);
                 _context.StudentClass.Add(StudentClass);
                 await _context.SaveChangesAsync();
             }
@@ -84,7 +90,10 @@ namespace WebApplication1.Pages.Students
         public async Task<IActionResult> OnPostRemove(int id, int classID)
         {
             var StudentClass = await _context.StudentClass.FindAsync(classID, id);
-
+            Class2 = await _context.Class
+            .FirstOrDefaultAsync(m => m.ClassID == classID);
+            Class2.Capacity++;
+            _context.Class.Update(Class2);
             _context.StudentClass.Remove(StudentClass);
             await _context.SaveChangesAsync();
 
