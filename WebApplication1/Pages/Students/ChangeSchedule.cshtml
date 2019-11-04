@@ -144,10 +144,22 @@
 <script>
     $(document).ready(function () {
         var classSchedules = @Html.Raw(Json.Serialize(Model.classSchedules));
+        var publicClassSchedules = @Html.Raw(Json.Serialize(Model.publicClassSchedules));
+
         classSchedules.forEach(function (classSchedule) {
-            
-            var clas = classSchedule.class;
+            var className = classSchedule.class.course.name;
             var schedule = classSchedule.schedule;
+            AddSchedule(schedule, className, 'table-info');
+
+        });
+
+        publicClassSchedules.forEach(function (publicClass) {
+            var className = publicClass.studentPublicSchoolClass.courseName;
+            var schedule = publicClass.schedule;
+            AddSchedule(schedule, className, 'table-success');
+        });
+
+        function AddSchedule(schedule, className, tableColor) {
             var startTime = new Date(schedule.startTime);
             var endTime = new Date(schedule.endTime);
             var dayOfWeek = schedule.dayOfWeek;
@@ -158,13 +170,13 @@
             }
 
             var node = document.createElement("p");
-            var className = document.createTextNode(clas.course.name);
+            var className = document.createTextNode(className);
 
             node.appendChild(className);
 
             var element = $('#' + dayOfWeek + '_' + startTime.getHours());
             element.attr("rowspan", rowspan);
-            element.addClass("table-info");
+            element.addClass(tableColor);
             document.getElementById(dayOfWeek + '_' + startTime.getHours()).appendChild(node);
 
             var elementToDelete = $('#' + dayOfWeek + '_2_' + startTime.getHours());
@@ -184,8 +196,8 @@
 
                 i++;
             }
+        }
 
-        });
     });
 </script>
 }

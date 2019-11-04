@@ -33,6 +33,7 @@ namespace WebApplication1.Pages.Students
         public Class Class2 { get; set; }
 
         public List<ClassSchedule> classSchedules = new List<ClassSchedule>();
+        public List<PublicSchoolClassSchedule> publicClassSchedules = new List<PublicSchoolClassSchedule>();
 
         public async Task OnGetAsync(int? id)
         { 
@@ -43,8 +44,15 @@ namespace WebApplication1.Pages.Students
             Student = await _context.Student
                 .Include(s => s.StudentStatus).FirstOrDefaultAsync(m => m.StudentID == id);
 
-            //classSchedules = await _context.Schedule.ToListAsync();
-            List<int> ClassList = await _context.StudentClass.Where(s => s.StudentID == id).Select(s=>s.ClassID).ToListAsync();
+            List<int> ClassList = await _context.StudentClass
+                .Where(s => s.StudentID == id)
+                .Select(s=>s.ClassID).ToListAsync();
+
+            publicClassSchedules = await _context.PublicSchoolClassSchedule
+                .Include(p=>p.Schedule)
+                .Include(p=>p.StudentPublicSchoolClass)
+                .Where(p => p.StudentPublicSchoolClass.StudentID == id).ToListAsync();
+
             foreach(int i in ClassList)
             {
                 List<ClassSchedule> schedule = await _context.ClassSchedule
