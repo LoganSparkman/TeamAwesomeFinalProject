@@ -77,7 +77,7 @@ namespace WebApplication1.Pages.Classes
                 return Page();
             }
 
-            _context.Attach(Class).State = EntityState.Modified;
+            _context.Attach(Class).State = EntityState.Modified; 
 
             var ClassSchedules = _context.ClassSchedule.Where(c => c.ClassID == id);
 

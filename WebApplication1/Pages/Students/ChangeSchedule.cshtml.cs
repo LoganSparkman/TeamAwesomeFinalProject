@@ -28,6 +28,10 @@ namespace WebApplication1.Pages.Students
         [BindProperty]
         public IList<Class> Class { get; set; }
         [BindProperty]
+        public IList<ClassSchedule> ClassSchedule { get; set; }
+        [BindProperty]
+        public IList<Schedule> Schedule { get; set; }
+        [BindProperty]
         public Student Student { get; set; }
         [BindProperty]
         public Class Class2 { get; set; }
@@ -40,6 +44,10 @@ namespace WebApplication1.Pages.Students
             Class = await _context.Class
                 .Include(c => c.Course)
                 .Include(t => t.Term).ToListAsync();
+
+            ClassSchedule = await _context.ClassSchedule.ToListAsync();
+
+            Schedule = await _context.Schedule.ToListAsync();
 
             Student = await _context.Student
                 .Include(s => s.StudentStatus).FirstOrDefaultAsync(m => m.StudentID == id);
