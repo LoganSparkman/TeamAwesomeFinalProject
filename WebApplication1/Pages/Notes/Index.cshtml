@@ -34,7 +34,15 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Content)
+                    @if (item.Content != null && item.Content.Length > 20)
+                    {
+                        @item.Content.ToString().Substring(0, 20)
+                        <text>...</text>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Content)
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Student.FirstName)

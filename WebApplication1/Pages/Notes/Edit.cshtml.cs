@@ -39,7 +39,7 @@ namespace WebApplication1.Pages.Notes
             {
                 return NotFound();
             }
-           ViewData["UserID"] = new SelectList(_context.Users, "Id", "Id");
+           ViewData["UserID"] = new SelectList(_context.Users, "Id", "Name");
            ViewData["NoteTypeID"] = new SelectList(_context.NoteType, "NoteTypeID", "Name");
            ViewData["StudentID"] = new SelectList(_context.Student, "StudentID", "FirstName");
             return Page();
