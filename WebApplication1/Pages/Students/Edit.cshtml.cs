@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,23 @@ namespace WebApplication1.Pages.Students
             }
 
             _context.Attach(Student).State = EntityState.Modified;
+
+            var files = HttpContext.Request.Form.Files;
+
+            if (files.Count > 0)
+            {
+                byte[] pic = null;
+
+                using (var fs = files[0].OpenReadStream())
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        fs.CopyTo(ms);
+                        pic = ms.ToArray();
+                    }
+                }
+                Student.Picture = pic;
+            }
 
             try
             {

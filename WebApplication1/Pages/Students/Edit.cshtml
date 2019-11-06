@@ -9,82 +9,105 @@
 
 <h4>Student</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Student.StudentID" />
-            <div class="form-group">
-                <label asp-for="Student.FirstName" class="control-label"></label>
-                <input asp-for="Student.FirstName" class="form-control" />
-                <span asp-validation-for="Student.FirstName" class="text-danger"></span>
+<form method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Student.StudentID" />
+    <div class="row col-12">
+        <div class="col-8">
+            <div class="row">
+                <div class="form-group col-6">
+                    <label asp-for="Student.FirstName" class="control-label"></label>
+                    <input asp-for="Student.FirstName" class="form-control" />
+                    <span asp-validation-for="Student.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-6">
+                    <label asp-for="Student.LastName" class="control-label"></label>
+                    <input asp-for="Student.LastName" class="form-control" />
+                    <span asp-validation-for="Student.LastName" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Student.LastName" class="control-label"></label>
-                <input asp-for="Student.LastName" class="form-control" />
-                <span asp-validation-for="Student.LastName" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group col-4">
+                    <label asp-for="Student.DateOfBirth" class="control-label"></label>
+                    <input asp-for="Student.DateOfBirth" class="form-control" />
+                    <span asp-validation-for="Student.DateOfBirth" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="Student.PublicSchoolLevel" class="control-label"></label>
+                    <input asp-for="Student.PublicSchoolLevel" class="form-control" />
+                    <span asp-validation-for="Student.PublicSchoolLevel" class="text-danger"></span>
+                </div>
+                <div class="form-group col-4">
+                    <label asp-for="Student.Phone" class="control-label"></label>
+                    <input asp-for="Student.Phone" class="form-control" />
+                    <span asp-validation-for="Student.Phone" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Student.DateOfBirth" class="control-label"></label>
-                <input asp-for="Student.DateOfBirth" class="form-control" />
-                <span asp-validation-for="Student.DateOfBirth" class="text-danger"></span>
+            <div class="row">
+                <div class="form-group col-6">
+                    <label asp-for="Student.GuardianName" class="control-label"></label>
+                    <input asp-for="Student.GuardianName" class="form-control" />
+                    <span asp-validation-for="Student.GuardianName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-6">
+                    <label asp-for="Student.GuardianType" class="control-label"></label>
+                    <input asp-for="Student.GuardianType" class="form-control" />
+                    <span asp-validation-for="Student.GuardianType" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Student.Address" class="control-label"></label>
-                <input asp-for="Student.Address" class="form-control" />
-                <span asp-validation-for="Student.Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.Village" class="control-label"></label>
-                <input asp-for="Student.Village" class="form-control" />
-                <span asp-validation-for="Student.Village" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.GPSLatitude" class="control-label"></label>
-                <input asp-for="Student.GPSLatitude" class="form-control" />
-                <span asp-validation-for="Student.GPSLatitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.GPSLongitude" class="control-label"></label>
-                <input asp-for="Student.GPSLongitude" class="form-control" />
-                <span asp-validation-for="Student.GPSLongitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.PublicSchoolLevel" class="control-label"></label>
-                <input asp-for="Student.PublicSchoolLevel" class="form-control" />
-                <span asp-validation-for="Student.PublicSchoolLevel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.GuardianName" class="control-label"></label>
-                <input asp-for="Student.GuardianName" class="form-control" />
-                <span asp-validation-for="Student.GuardianName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.GuardianType" class="control-label"></label>
-                <input asp-for="Student.GuardianType" class="form-control" />
-                <span asp-validation-for="Student.GuardianType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.Phone" class="control-label"></label>
-                <input asp-for="Student.Phone" class="form-control" />
-                <span asp-validation-for="Student.Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.Picture" class="control-label"></label>
-                <input asp-for="Student.Picture" class="form-control" />
-                <span asp-validation-for="Student.Picture" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Student.StudentStatusID" class="control-label"></label>
-                <select asp-for="Student.StudentStatusID" class="form-control" asp-items="ViewBag.StudentStatusID"></select>
-                <span asp-validation-for="Student.StudentStatusID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+        <div class="col-4">
+            @{
+                if (Model.Student.Picture != null)
+                {
+                    var base64 = Convert.ToBase64String(Model.Student.Picture);
+                    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                    <img src="@imgsrc" style="display: block; margin: auto;" />
+                }
+            }
+        </div>
     </div>
-</div>
+    <div class="row col-12">
+        <div class="form-group col-5">
+            <label asp-for="Student.Address" class="control-label"></label>
+            <input asp-for="Student.Address" class="form-control" />
+            <span asp-validation-for="Student.Address" class="text-danger"></span>
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="Student.Village" class="control-label"></label>
+            <input asp-for="Student.Village" class="form-control" />
+            <span asp-validation-for="Student.Village" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row col-12">
+        <div class="form-group col-4">
+            <label asp-for="Student.GPSLatitude" class="control-label"></label>
+            <input asp-for="Student.GPSLatitude" class="form-control" />
+            <span asp-validation-for="Student.GPSLatitude" class="text-danger"></span>
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="Student.GPSLongitude" class="control-label"></label>
+            <input asp-for="Student.GPSLongitude" class="form-control" />
+            <span asp-validation-for="Student.GPSLongitude" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row col-12">
+        <div class="form-group col-5">
+            <label asp-for="Student.Picture" class="control-label"></label>
+            <div>
+                <input type="file" id="couponimage" name="files" multiple class="form-control" />
+            </div>
+        </div>
+        <div class="form-group col-3">
+            <label asp-for="Student.StudentStatusID" class="control-label"></label>
+            <select asp-for="Student.StudentStatusID" class="form-control" asp-items="ViewBag.StudentStatusID"></select>
+            <span asp-validation-for="Student.StudentStatusID" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
 
 <div>
     <a asp-page="./Index">Back to List</a>

@@ -22,6 +22,7 @@ namespace WebApplication1.Models
         [Display(Name = "Date of Birth")]
         [Required]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         [StringLength(50)]
         public string Address { get; set; }
