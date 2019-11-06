@@ -23,23 +23,13 @@ namespace WebApplication1.Pages.Notes
         public int? studentID;
 
         public async Task OnGetAsync(int? id)
-        {
-            if (id != null)
-            {
-                studentID = id;
-                Note = await _context.Note
-                    .Include(n => n.IdentityUser)
-                    .Include(n => n.NoteType)
-                    .Include(n => n.Student)
-                    .Where(n => n.StudentID == id).ToListAsync();
-            }
-            else
-            {
-                Note = await _context.Note
-                    .Include(n => n.IdentityUser)
-                    .Include(n => n.NoteType)
-                    .Include(n => n.Student).ToListAsync();
-            }
+        { 
+            studentID = id;
+            Note = await _context.Note
+                .Include(n => n.IdentityUser)
+                .Include(n => n.NoteType)
+                .Include(n => n.Student)
+                .Where(n => n.StudentID == id).ToListAsync();
         }
     }
 }

@@ -10,11 +10,6 @@
 <p>
     <a asp-page="Create" asp-route-id="@Model.studentID">Create New</a>
 </p>
-@if (Model.studentID != null)
-{
-    <h4>Notes for @Model.Note[0].Student.FirstName </h4>
-    <a asp-page="Index">Back to all Notes</a>
-}
 
 <table class="table">
     <thead>
