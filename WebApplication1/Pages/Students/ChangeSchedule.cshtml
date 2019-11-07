@@ -8,6 +8,16 @@
 <h1>Change Schedule</h1>
 
 <h4>@Model.Student.FirstName @Model.Student.LastName</h4>
+
+
+<form method="post">
+    <div class="form-group">
+        <h4>Filter by term</h4>
+        <select asp-for="Term.TermID" name="termid" class="form-control" asp-items="ViewBag.TermID"></select>
+    </div>
+    <input type="hidden" name="id" asp-for="Student.StudentID" />
+    <input type="submit" value="Filter" class="btn btn-primary" asp-page-handler="Filter" />
+</form>
 <hr />
 <table class="table">
     <thead>
@@ -32,17 +42,17 @@
             var count = 0;
             var enrolled = false;
             var timeCounter = 0;
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Capacity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Course.Name)
-            </td>
-           
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Capacity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Course.Name)
+                </td>
+
                 @foreach (var i in Model.ClassSchedule)
                 {
-                    
+
                     @if (i.ClassID == item.ClassID)
                     {
                         @foreach (var schedule in Model.Schedule)
@@ -159,7 +169,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script>
+    <script>
     $(document).ready(function () {
         var classSchedules = @Html.Raw(Json.Serialize(Model.classSchedules));
         var publicClassSchedules = @Html.Raw(Json.Serialize(Model.publicClassSchedules));
@@ -217,5 +227,5 @@
         }
 
     });
-</script>
+    </script>
 }
