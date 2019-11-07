@@ -7,27 +7,18 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models
 {
-    public class StudentClass
+    public class StudentSchedule
     {
-
-
-
-        [Display(Name = "Class")]
         [Required]
-        public int ClassID { get; set; }
-        [ForeignKey("ClassID")]
-        public virtual Class Class { get; set; }
+        [Display(Name = "Schedule")]
+        public int ClassScheduleID { get; set; }
+        [ForeignKey("ClassScheduleID")]
+        public virtual ClassSchedule ClassSchedule { get; set; }
 
         [Required]
         [Display(Name = "Student")]
         public int StudentID { get; set; }
         [ForeignKey("StudentID")]
         public virtual Student Student { get; set; }
-
-        [Display(Name = "Schedule")]
-        [Required]
-        public int ScheduleID { get; set; }
-        [ForeignKey("ScheduleID")]
-        public virtual Schedule Schedule { get; set; }
     }
 }

@@ -85,7 +85,7 @@ namespace WebApplication1.Pages.Students
             ViewData["TermID"] = new SelectList(_context.Term, "TermID", "Description");
         }
 
-        public async Task<IActionResult> OnPostAdd(int id, int classID)
+        public async Task<IActionResult> OnPostAdd(int id, int classID, int scheduleID)
         {
             
             try
@@ -96,6 +96,7 @@ namespace WebApplication1.Pages.Students
                 StudentClass StudentClass = new StudentClass();
                 StudentClass.StudentID = id;
                 StudentClass.ClassID = classID;
+                StudentClass.ScheduleID = scheduleID;
                 _context.Class.Update(Class2);
                 _context.StudentClass.Add(StudentClass);
                 await _context.SaveChangesAsync();
@@ -115,9 +116,9 @@ namespace WebApplication1.Pages.Students
             return RedirectToPage("./ChangeSchedule", new { id });
         }
 
-        public async Task<IActionResult> OnPostRemove(int id, int classID)
+        public async Task<IActionResult> OnPostRemove(int id, int classID, int scheduleID)
         {
-            var StudentClass = await _context.StudentClass.FindAsync(classID, id);
+            var StudentClass = await _context.StudentClass.FindAsync(classID, id, scheduleID);
             Class2 = await _context.Class
             .FirstOrDefaultAsync(m => m.ClassID == classID);
             Class2.Capacity++;

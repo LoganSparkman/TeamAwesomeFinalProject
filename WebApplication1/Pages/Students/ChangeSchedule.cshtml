@@ -42,87 +42,90 @@
             var count = 0;
             var enrolled = false;
             var timeCounter = 0;
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Capacity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Course.Name)
-                </td>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Capacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.Name)
+            </td>
 
-                @foreach (var i in Model.ClassSchedule)
+            @foreach (var i in Model.ClassSchedule)
+            {
+
+                @if (i.ClassID == item.ClassID)
                 {
-
-                    @if (i.ClassID == item.ClassID)
+                    @foreach (var schedule in Model.Schedule)
                     {
-                        @foreach (var schedule in Model.Schedule)
+                        @if (schedule.ScheduleID == i.ScheduleID && timeCounter == 0)
                         {
-                            @if (schedule.ScheduleID == i.ScheduleID && timeCounter == 0)
+
+                            <td>@schedule.StartTime.ToString().Substring(10)</td>
+                            <td>@schedule.EndTime.ToString().Substring(10)</td>
+                            timeCounter++;
+                        }
+                    }
+                }
+            }
+            @if (Model.StudentClass.Count > 0)
+            {
+                var classCount = Model.StudentClass.Count;
+                var loopTracker = 0;
+                @foreach (var sc in Model.StudentClass)
+                {
+                    @if (count > 0)
+                    {
+                        break;
+                    }
+                    @if (Model.Student.StudentID == sc.StudentID && item.ClassID == sc.ClassID)
+                    {
+                        enrolled = true;
+                        count++;
+                    }
+                    /*
+                    else if(loopTracker == (classCount-1))
+                    {
+                        <td>No</td>
+                    }*/
+                    loopTracker++;
+                }
+            }
+            else
+            {
+                <td>No</td>
+            }
+            <td>
+                <form method="post">
+                    @if (!enrolled)
+                    {
+                        <input type="hidden" name="id" asp-for="Student.StudentID" />
+                        <input type="hidden" name="classid" asp-for="@item.ClassID" />
+                        <input type="hidden" name="scheduleid" value="2" /> //Just to get working for now
+                        <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" />
+            }
+            else
+            {
+                <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" disabled />
+            }
+                    </form>
+                    </td>
+                    <td>
+
+                        <form method="post">
+                            @if (enrolled)
                             {
-                                <td>@schedule.StartTime.ToString().Substring(10)</td>
-                                <td>@schedule.EndTime.ToString().Substring(10)</td>
-                                timeCounter++;
+                                <input type="hidden" name="id" asp-for="Student.StudentID" />
+                                <input type="hidden" name="classid" asp-for="@item.ClassID" />
+                                <input type="hidden" name="scheduleid" value="2" /> //Just to get working for now
+                                <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" />
                             }
-                        }
-                    }
-                }
-                @if (Model.StudentClass.Count > 0)
-                {
-                    var classCount = Model.StudentClass.Count;
-                    var loopTracker = 0;
-                    @foreach (var sc in Model.StudentClass)
-                    {
-                        @if (count > 0)
-                        {
-                            break;
-                        }
-                        @if (Model.Student.StudentID == sc.StudentID && item.ClassID == sc.ClassID)
-                        {
-                            enrolled = true;
-                            count++;
-                        }
-                        /*
-                        else if(loopTracker == (classCount-1))
-                        {
-                            <td>No</td>
-                        }*/
-                        loopTracker++;
-                    }
-                }
-                else
-                {
-                    <td>No</td>
-                }
-                <td>
-                    <form method="post">
-                        @if (!enrolled)
-                        {
-                            <input type="hidden" name="id" asp-for="Student.StudentID" />
-                            <input type="hidden" name="classid" asp-for="@item.ClassID" />
-                            <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" />
-                        }
-                        else
-                        {
-                            <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" disabled />
-                        }
-                    </form>
-                </td>
-                <td>
-
-                    <form method="post">
-                        @if (enrolled)
-                        {
-                            <input type="hidden" name="id" asp-for="Student.StudentID" />
-                            <input type="hidden" name="classid" asp-for="@item.ClassID" />
-                            <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" />
-                        }
-                        else
-                        {
-                            <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" disabled />
-                        }
-                    </form>
-                </td>
-            </tr>
+                            else
+                            {
+                                <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" disabled />
+                            }
+                        </form>
+                    </td>
+                </tr>
         }
     </tbody>
 </table>

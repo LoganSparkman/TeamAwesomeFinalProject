@@ -40,8 +40,8 @@ namespace WebApplication1.Data
 
         //Below is an attempt at creating tables using FKs as PKs. This should be possible, but it is nessesary to know
         //All of the classes in the Identity framework, and the DB tables. If this is known, then we can add FKPK tables.
-        
-            
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Call Base OnModelCreating
@@ -51,7 +51,7 @@ namespace WebApplication1.Data
             modelBuilder.Entity<ClassInstructor>()
                 .HasKey(c => new { c.ClassID, c.UserID });
             modelBuilder.Entity<StudentClass>()
-                .HasKey(c => new { c.ClassID, c.StudentID });
+                .HasKey(c => new { c.ClassID, c.StudentID, c.ScheduleID });
             modelBuilder.Entity<Attendance>()
                 .HasKey(c => new { c.ClassID, c.StudentID, c.Date });
             modelBuilder.Entity<ClassSchedule>()
