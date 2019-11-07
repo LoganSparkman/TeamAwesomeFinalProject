@@ -64,6 +64,7 @@ namespace WebApplication1.Pages.Students
 
             List<int> ClassList = await _context.StudentClass
                 .Where(s => s.StudentID == id)
+                .Where(s => s.Class.TermID == termid)
                 .Select(s=>s.ClassID).ToListAsync();
 
             publicClassSchedules = await _context.PublicSchoolClassSchedule
@@ -145,6 +146,7 @@ namespace WebApplication1.Pages.Students
 
             List<int> ClassList = await _context.StudentClass
                 .Where(s => s.StudentID == id)
+                .Where(s => s.Class.TermID == termid)
                 .Select(s => s.ClassID).ToListAsync();
 
             publicClassSchedules = await _context.PublicSchoolClassSchedule

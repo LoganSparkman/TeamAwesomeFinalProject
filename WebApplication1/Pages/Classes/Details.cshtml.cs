@@ -19,7 +19,7 @@ namespace WebApplication1.Pages.Classes
             _context = context;
         }
 
-        public Class Class { get; set; }
+        public List<ClassSchedule> ClassSchedule { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,14 +28,21 @@ namespace WebApplication1.Pages.Classes
                 return NotFound();
             }
 
-            Class = await _context.Class
-                .Include(c => c.Course)
-                .Include(t =>t.Term).FirstOrDefaultAsync(m => m.ClassID == id);
+            ClassSchedule = await _context.ClassSchedule
+                .Include(c => c.Class)
+                .Include(c => c.Schedule)
+                .Include(c => c.Class.Course)
+                .Include(c => c.Class.Term).Where(m => m.ClassID == id).ToListAsync();
 
-            if (Class == null)
+            if (ClassSchedule == null)
             {
                 return NotFound();
             }
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
             return Page();
         }
     }
