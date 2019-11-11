@@ -1,0 +1,43 @@
+﻿@page
+@model WebApplication1.Pages.Grades.ClassListModel
+
+@{
+    ViewData["Title"] = "ClassList";
+}
+
+<h1>Your Classes</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Class[0].Capacity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Class[0].Course)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Class[0].Term)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Class) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Capacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Term.TermID)
+            </td>
+            <td>
+                <a asp-page="./StudentList" asp-route-classId="@item.ClassID">Students</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

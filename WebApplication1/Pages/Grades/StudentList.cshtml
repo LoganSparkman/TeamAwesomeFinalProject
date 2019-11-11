@@ -1,0 +1,41 @@
+﻿@page
+@model WebApplication1.Pages.Grades.StudentListModel
+
+@{
+    ViewData["Title"] = "StudentList";
+}
+
+<h1>Student List</h1>
+
+<p>
+    <a asp-page="./ClassList">Back to Class List</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Student[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Student[0].LastName)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Student) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                <a asp-page="./GradesList" asp-route-studentId="@item.StudentID" asp-route-classId="@Model.classId">Grades</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

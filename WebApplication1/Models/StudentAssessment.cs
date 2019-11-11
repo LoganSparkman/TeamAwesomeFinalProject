@@ -10,14 +10,14 @@ namespace WebApplication1.Models
     public class StudentAssessment
     {
 
-        [Required]
+        
         public int PointsAwarded { get; set; }
         [StringLength(5000)]
         public string Comment { get; set; }
 
         [Display(Name = "Assessment")]
         [Required]
-        public int AssessnentID { get; set; }
+        public int AssessmentID { get; set; }
         [ForeignKey("AssessmentID")]
         public virtual Assessment Assessment { get; set; }
 
