@@ -23,11 +23,5 @@ namespace WebApplication1.Models
         public int StudentID { get; set; }
         [ForeignKey("StudentID")]
         public virtual Student Student { get; set; }
-
-        [Display(Name = "Schedule")]
-        [Required]
-        public int ScheduleID { get; set; }
-        [ForeignKey("ScheduleID")]
-        public virtual Schedule Schedule { get; set; }
     }
 }

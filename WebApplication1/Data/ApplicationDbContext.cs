@@ -51,7 +51,7 @@ namespace WebApplication1.Data
             modelBuilder.Entity<ClassInstructor>()
                 .HasKey(c => new { c.ClassID, c.UserID });
             modelBuilder.Entity<StudentClass>()
-                .HasKey(c => new { c.ClassID, c.StudentID, c.ScheduleID });
+                .HasKey(c => new { c.ClassID, c.StudentID });
             modelBuilder.Entity<Attendance>()
                 .HasKey(c => new { c.ClassID, c.StudentID, c.Date });
             modelBuilder.Entity<ClassSchedule>()

@@ -100,7 +100,6 @@
                     {
                         <input type="hidden" name="id" asp-for="Student.StudentID" />
                         <input type="hidden" name="classid" asp-for="@item.ClassID" />
-                        <input type="hidden" name="scheduleid" value="2" /> //Just to get working for now
                         <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" />
             }
             else
@@ -116,7 +115,6 @@
                             {
                                 <input type="hidden" name="id" asp-for="Student.StudentID" />
                                 <input type="hidden" name="classid" asp-for="@item.ClassID" />
-                                <input type="hidden" name="scheduleid" value="2" /> //Just to get working for now
                                 <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" />
                             }
                             else
