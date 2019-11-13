@@ -13,6 +13,16 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Student.StudentID" />
     <div class="row col-12">
+        <div class="col-4">
+            @{
+                if (Model.Student.Picture != null)
+                {
+                    var base64 = Convert.ToBase64String(Model.Student.Picture);
+                    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                    <img src="@imgsrc" style="display: block; margin: auto;" />
+                }
+            }
+        </div>
         <div class="col-8">
             <div class="row">
                 <div class="form-group col-6">
@@ -49,15 +59,22 @@
                 </div>
             </div>
         </div>
-        <div class="col-4">
-            @{
-                if (Model.Student.Picture != null)
-                {
-                    var base64 = Convert.ToBase64String(Model.Student.Picture);
-                    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-                    <img src="@imgsrc" style="display: block; margin: auto;" />
-                }
-            }
+    </div>
+    <div class="row col-12">
+        <div class="form-group col-4">
+            <label asp-for="Student.PublicSchoolLevel" class="control-label"></label>
+            <input asp-for="Student.PublicSchoolLevel" class="form-control" />
+            <span asp-validation-for="Student.PublicSchoolLevel" class="text-danger"></span>
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="Student.EnglishLevel" class="control-label"></label>
+            <input asp-for="Student.EnglishLevel" class="form-control" />
+            <span asp-validation-for="Student.EnglishLevel" class="text-danger"></span>
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="Student.ITLevel" class="control-label"></label>
+            <input asp-for="Student.ITLevel" class="form-control" />
+            <span asp-validation-for="Student.ITLevel" class="text-danger"></span>
         </div>
     </div>
     <div class="row col-12">

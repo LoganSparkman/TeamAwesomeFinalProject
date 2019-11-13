@@ -40,10 +40,5 @@ namespace WebApplication1.Pages.Classes
             }
             return Page();
         }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            return Page();
-        }
     }
 }

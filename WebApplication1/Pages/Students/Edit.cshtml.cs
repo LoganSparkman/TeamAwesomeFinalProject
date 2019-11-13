@@ -49,8 +49,6 @@ namespace WebApplication1.Pages.Students
                 return Page();
             }
 
-            _context.Attach(Student).State = EntityState.Modified;
-
             var files = HttpContext.Request.Form.Files;
 
             if (files.Count > 0)
@@ -67,6 +65,8 @@ namespace WebApplication1.Pages.Students
                 }
                 Student.Picture = pic;
             }
+
+            _context.Attach(Student).State = EntityState.Modified;
 
             try
             {
