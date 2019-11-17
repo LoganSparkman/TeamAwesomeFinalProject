@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Pages.Students
+namespace WebApplication1.Pages.Notes
 {
     public class EditModel : PageModel
     {
@@ -22,7 +21,7 @@ namespace WebApplication1.Pages.Students
         }
 
         [BindProperty]
-        public Student Student { get; set; }
+        public Note Note { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -31,14 +30,18 @@ namespace WebApplication1.Pages.Students
                 return NotFound();
             }
 
-            Student = await _context.Student
-                .Include(s => s.StudentStatus).FirstOrDefaultAsync(m => m.StudentID == id);
+            Note = await _context.Note
+                .Include(n => n.IdentityUser)
+                .Include(n => n.NoteType)
+                .Include(n => n.Student).FirstOrDefaultAsync(m => m.NoteID == id);
 
-            if (Student == null)
+            if (Note == null)
             {
                 return NotFound();
             }
-           ViewData["StudentStatusID"] = new SelectList(_context.StudentStatus, "StudentStatusID", "Name");
+           ViewData["UserID"] = new SelectList(_context.Users, "Id", "Name");
+           ViewData["NoteTypeID"] = new SelectList(_context.NoteType, "NoteTypeID", "Name");
+           ViewData["StudentID"] = new SelectList(_context.Student, "StudentID", "FirstName");
             return Page();
         }
 
@@ -49,24 +52,7 @@ namespace WebApplication1.Pages.Students
                 return Page();
             }
 
-            var files = HttpContext.Request.Form.Files;
-
-            if (files.Count > 0)
-            {
-                byte[] pic = null;
-
-                using (var fs = files[0].OpenReadStream())
-                {
-                    using (var ms = new MemoryStream())
-                    {
-                        fs.CopyTo(ms);
-                        pic = ms.ToArray();
-                    }
-                }
-                Student.Picture = pic;
-            }
-
-            _context.Attach(Student).State = EntityState.Modified;
+            _context.Attach(Note).State = EntityState.Modified;
 
             try
             {
@@ -74,7 +60,7 @@ namespace WebApplication1.Pages.Students
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!StudentExists(Student.StudentID))
+                if (!NoteExists(Note.NoteID))
                 {
                     return NotFound();
                 }
@@ -84,12 +70,12 @@ namespace WebApplication1.Pages.Students
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index", new { id = Note.StudentID });
         }
 
-        private bool StudentExists(int id)
+        private bool NoteExists(int id)
         {
-            return _context.Student.Any(e => e.StudentID == id);
+            return _context.Note.Any(e => e.NoteID == id);
         }
     }
 }

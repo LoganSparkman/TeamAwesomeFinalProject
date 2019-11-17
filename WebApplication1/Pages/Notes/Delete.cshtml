@@ -1,0 +1,39 @@
+﻿@page
+@model WebApplication1.Pages.Notes.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Note</h4>
+    <hr />
+    <div class="row">
+        <div class="form-group col-3">
+            <label asp-for="Note.Student" class="control-label"></label>
+            <input asp-for="Note.Student.FirstName" disabled class="form-control" />
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="Note.NoteType" class="control-label"></label>
+            <input asp-for="Note.NoteType.Name" disabled class="form-control" />
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="Note.IdentityUser" class="control-label"></label>
+            <input asp-for="Note.IdentityUser.UserName" disabled class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Note.Content" class="control-label"></label>
+        <textarea asp-for="Note.Content" readonly class="form-control"></textarea>
+        <span asp-validation-for="Note.Content" class="text-danger"></span>
+    </div>
+
+    <form method="post">
+        <input type="hidden" asp-for="Note.NoteID" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="Index" asp-route-id="@Model.Note.StudentID">Back to List</a>
+    </form>
+</div>

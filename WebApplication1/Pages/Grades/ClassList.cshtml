@@ -1,15 +1,12 @@
 ﻿@page
-@model WebApplication1.Pages.Classes.IndexModel
+@model WebApplication1.Pages.Grades.ClassListModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "ClassList";
 }
 
-<h1>Classes</h1>
+<h1>Your Classes</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -35,12 +32,10 @@
                 @Html.DisplayFor(modelItem => item.Course.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Term.Description)
+                @Html.DisplayFor(modelItem => item.Term.TermID)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.ClassID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ClassID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ClassID">Delete</a>
+                <a asp-page="./StudentList" asp-route-classId="@item.ClassID">Students</a>
             </td>
         </tr>
 }

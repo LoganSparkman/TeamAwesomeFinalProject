@@ -3,19 +3,21 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 namespace WebApplication1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191110233803_changedStudentAssessment")]
+    partial class changedStudentAssessment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -488,8 +490,6 @@ namespace WebApplication1.Data.Migrations
 
                     b.Property<DateTime>("DateOfBirth");
 
-                    b.Property<short>("EnglishLevel");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -505,8 +505,6 @@ namespace WebApplication1.Data.Migrations
                     b.Property<string>("GuardianType")
                         .IsRequired()
                         .HasMaxLength(50);
-
-                    b.Property<short>("ITLevel");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -556,7 +554,11 @@ namespace WebApplication1.Data.Migrations
 
                     b.Property<int>("StudentID");
 
-                    b.HasKey("ClassID", "StudentID");
+                    b.Property<int>("ScheduleID");
+
+                    b.HasKey("ClassID", "StudentID", "ScheduleID");
+
+                    b.HasIndex("ScheduleID");
 
                     b.HasIndex("StudentID");
 
@@ -829,6 +831,11 @@ namespace WebApplication1.Data.Migrations
                     b.HasOne("WebApplication1.Models.Class", "Class")
                         .WithMany()
                         .HasForeignKey("ClassID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WebApplication1.Models.Schedule", "Schedule")
+                        .WithMany()
+                        .HasForeignKey("ScheduleID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WebApplication1.Models.Student", "Student")

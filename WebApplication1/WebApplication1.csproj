@@ -33,6 +33,8 @@
     <Compile Remove="Data\Migrations\20191023221428_Test.Designer.cs" />
     <Compile Remove="Data\Migrations\20191023221525_Test.cs" />
     <Compile Remove="Data\Migrations\20191023221525_Test.Designer.cs" />
+    <Compile Remove="Data\Migrations\20191110233512_changedStudentAssessment.cs" />
+    <Compile Remove="Data\Migrations\20191110233512_changedStudentAssessment.Designer.cs" />
   </ItemGroup>
 
 

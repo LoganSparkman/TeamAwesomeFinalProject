@@ -1,0 +1,64 @@
+﻿@page
+@model WebApplication1.Pages.Notes.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create" asp-route-id="@Model.studentID">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Note[0].Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Note[0].Student)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Note[0].IdentityUser)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Note[0].NoteType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Note)
+        {
+            <tr>
+                <td>
+                    @if (item.Content != null && item.Content.Length > 20)
+                    {
+                        @item.Content.ToString().Substring(0, 20)
+                        <text>...</text>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Content)
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdentityUser.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NoteType.Name)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.NoteID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.NoteID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.NoteID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

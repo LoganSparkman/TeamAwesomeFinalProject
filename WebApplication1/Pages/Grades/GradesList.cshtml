@@ -1,0 +1,58 @@
+﻿@page
+@model WebApplication1.Pages.Grades.GradesListModel
+
+@{
+    ViewData["Title"] = "GradesList";
+}
+
+<h1>Grades List</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssessment[0].PointsAwarded)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssessment[0].Assessment.PointsPossible)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssessment[0].Comment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssessment[0].Student.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentAssessment[0].Student.LastName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.StudentAssessment) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PointsAwarded)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Assessment.PointsPossible)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Student.LastName)
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-AssesmentId="@item.AssessmentID" asp-route-StudentId="@item.StudentID">Details</a>
+                |
+                <a asp-page="./Edit" asp-route-AssesmentId="@item.AssessmentID" asp-route-StudentId="@item.StudentID">Edit</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

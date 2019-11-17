@@ -28,21 +28,50 @@ namespace WebApplication1.Pages.Students
         [BindProperty]
         public IList<Class> Class { get; set; }
         [BindProperty]
+        public IList<ClassSchedule> ClassSchedule { get; set; }
+        [BindProperty]
+        public IList<Schedule> Schedule { get; set; }
+        [BindProperty]
         public Student Student { get; set; }
+        [BindProperty]
+        public Term Term { get; set; }
+        [BindProperty]
+        public Class Class2 { get; set; }
 
         public List<ClassSchedule> classSchedules = new List<ClassSchedule>();
+        public List<PublicSchoolClassSchedule> publicClassSchedules = new List<PublicSchoolClassSchedule>();
 
         public async Task OnGetAsync(int? id)
-        { 
+        {
+            //gets the first termid in the table, this is what we want to filter off to start
+            int termid = _context.Term
+                    .OrderByDescending(t => t.TermID)
+                    .Select(t => t.TermID)
+                    .Last();
+
             Class = await _context.Class
                 .Include(c => c.Course)
-                .Include(t => t.Term).ToListAsync();
+                .Include(t => t.Term)
+                .Where(t => t.TermID == termid)
+                .ToListAsync();
+
+            ClassSchedule = await _context.ClassSchedule.ToListAsync();
+
+            Schedule = await _context.Schedule.ToListAsync();
 
             Student = await _context.Student
                 .Include(s => s.StudentStatus).FirstOrDefaultAsync(m => m.StudentID == id);
 
-            //classSchedules = await _context.Schedule.ToListAsync();
-            List<int> ClassList = await _context.StudentClass.Where(s => s.StudentID == id).Select(s=>s.ClassID).ToListAsync();
+            List<int> ClassList = await _context.StudentClass
+                .Where(s => s.StudentID == id)
+                .Where(s => s.Class.TermID == termid)
+                .Select(s=>s.ClassID).ToListAsync();
+
+            publicClassSchedules = await _context.PublicSchoolClassSchedule
+                .Include(p=>p.Schedule)
+                .Include(p=>p.StudentPublicSchoolClass)
+                .Where(p => p.StudentPublicSchoolClass.StudentID == id).ToListAsync();
+
             foreach(int i in ClassList)
             {
                 List<ClassSchedule> schedule = await _context.ClassSchedule
@@ -53,6 +82,8 @@ namespace WebApplication1.Pages.Students
             }
 
             StudentClass = await _context.StudentClass.ToListAsync();
+
+            ViewData["TermID"] = new SelectList(_context.Term, "TermID", "Description");
         }
 
         public async Task<IActionResult> OnPostAdd(int id, int classID)
@@ -60,9 +91,13 @@ namespace WebApplication1.Pages.Students
             
             try
             {
+                Class2 = await _context.Class
+                .FirstOrDefaultAsync(m => m.ClassID == classID);
+                Class2.Capacity--;
                 StudentClass StudentClass = new StudentClass();
                 StudentClass.StudentID = id;
                 StudentClass.ClassID = classID;
+                _context.Class.Update(Class2);
                 _context.StudentClass.Add(StudentClass);
                 await _context.SaveChangesAsync();
             }
@@ -84,11 +119,52 @@ namespace WebApplication1.Pages.Students
         public async Task<IActionResult> OnPostRemove(int id, int classID)
         {
             var StudentClass = await _context.StudentClass.FindAsync(classID, id);
-
+            Class2 = await _context.Class
+            .FirstOrDefaultAsync(m => m.ClassID == classID);
+            Class2.Capacity++;
+            _context.Class.Update(Class2);
             _context.StudentClass.Remove(StudentClass);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./ChangeSchedule", new { id });
+        }
+
+        public async Task OnPostFilter(int id, int termid)
+        {
+            Class = await _context.Class
+                 .Include(c => c.Course)
+                 .Include(t => t.Term)
+                 .Where(t => t.TermID == termid).ToListAsync();
+
+            ClassSchedule = await _context.ClassSchedule.ToListAsync();
+
+            Schedule = await _context.Schedule.ToListAsync();
+
+            Student = await _context.Student
+                .Include(s => s.StudentStatus).FirstOrDefaultAsync(m => m.StudentID == id);
+
+            List<int> ClassList = await _context.StudentClass
+                .Where(s => s.StudentID == id)
+                .Where(s => s.Class.TermID == termid)
+                .Select(s => s.ClassID).ToListAsync();
+
+            publicClassSchedules = await _context.PublicSchoolClassSchedule
+                .Include(p => p.Schedule)
+                .Include(p => p.StudentPublicSchoolClass)
+                .Where(p => p.StudentPublicSchoolClass.StudentID == id).ToListAsync();
+
+            foreach (int i in ClassList)
+            {
+                List<ClassSchedule> schedule = await _context.ClassSchedule
+                    .Include(c => c.Schedule)
+                    .Include(c => c.Class)
+                    .Where(c => c.ClassID == i).ToListAsync();
+                classSchedules.AddRange(schedule);
+            }
+
+            StudentClass = await _context.StudentClass.ToListAsync();
+
+            ViewData["TermID"] = new SelectList(_context.Term, "TermID", "Description");
         }
 
         private bool StudentExists(int id)

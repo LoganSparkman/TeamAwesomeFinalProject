@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-namespace WebApplication1.Pages.Students
+namespace WebApplication1.Pages.Notes
 {
     public class CreateModel : PageModel
     {
@@ -20,43 +20,33 @@ namespace WebApplication1.Pages.Students
             _context = context;
         }
 
-        public IActionResult OnGet()
+        public IActionResult OnGet(int id)
         {
-        ViewData["StudentStatusID"] = new SelectList(_context.StudentStatus, "StudentStatusID", "Name");
+            ViewData["UserID"] = new SelectList(_context.Users, "Id", "Name", User.FindFirstValue(ClaimTypes.NameIdentifier));
+            ViewData["NoteTypeID"] = new SelectList(_context.NoteType, "NoteTypeID", "Name");
+            ViewData["StudentID"] = new SelectList(_context.Student, "StudentID", "FirstName", id);
+            Note = new Note
+            {
+                StudentID = id
+            };
             return Page();
         }
 
         [BindProperty]
-        public Student Student { get; set; }
+        public Note Note { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            var files = HttpContext.Request.Form.Files;
-
-            if (files.Count > 0)
-            {
-                byte[] pic = null;
-
-                using (var fs = files[0].OpenReadStream())
-                {
-                    using (var ms = new MemoryStream())
-                    {
-                        fs.CopyTo(ms);
-                        pic = ms.ToArray();
-                    }
-                }
-                Student.Picture = pic;
-            }
-
-            _context.Student.Add(Student);
+            _context.Note.Add(Note);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index", new { id = Note.StudentID });
         }
     }
 }

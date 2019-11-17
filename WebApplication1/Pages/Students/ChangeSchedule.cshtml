@@ -8,6 +8,16 @@
 <h1>Change Schedule</h1>
 
 <h4>@Model.Student.FirstName @Model.Student.LastName</h4>
+
+
+<form method="post">
+    <div class="form-group">
+        <h4>Filter by term</h4>
+        <select asp-for="Term.TermID" name="termid" class="form-control" asp-items="ViewBag.TermID"></select>
+    </div>
+    <input type="hidden" name="id" asp-for="Student.StudentID" />
+    <input type="submit" value="Filter" class="btn btn-primary" asp-page-handler="Filter" />
+</form>
 <hr />
 <table class="table">
     <thead>
@@ -19,12 +29,11 @@
                 @Html.DisplayNameFor(model => model.Class[0].Course)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Class[0].Term)
+                Start Time
             </th>
             <th>
-                Assigned?
+                End Time
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -32,42 +41,59 @@
         {
             var count = 0;
             var enrolled = false;
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Capacity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Course.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Term.Description)
-                </td>
-                @if (Model.StudentClass.Count > 0)
+            var timeCounter = 0;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Capacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.Name)
+            </td>
+
+            @foreach (var i in Model.ClassSchedule)
+            {
+
+                @if (i.ClassID == item.ClassID)
                 {
-                    var classCount = Model.StudentClass.Count;
-                    var loopTracker = 0;
-                    @foreach (var sc in Model.StudentClass)
+                    @foreach (var schedule in Model.Schedule)
                     {
-                        @if (count > 0){
-                            break;
-                        }
-                        @if(Model.Student.StudentID == sc.StudentID && item.ClassID == sc.ClassID)
+                        @if (schedule.ScheduleID == i.ScheduleID && timeCounter == 0)
                         {
-                            <td>Yes</td>
-                            enrolled = true;
-                            count++;
+
+                            <td>@schedule.StartTime.ToString().Substring(10)</td>
+                            <td>@schedule.EndTime.ToString().Substring(10)</td>
+                            timeCounter++;
                         }
-                        else if(loopTracker == (classCount-1))
-                        {
-                            <td>No</td>
-                        }
-                        loopTracker++;
                     }
                 }
-                else
+            }
+            @if (Model.StudentClass.Count > 0)
+            {
+                var classCount = Model.StudentClass.Count;
+                var loopTracker = 0;
+                @foreach (var sc in Model.StudentClass)
                 {
-                    <td>No</td>
+                    @if (count > 0)
+                    {
+                        break;
+                    }
+                    @if (Model.Student.StudentID == sc.StudentID && item.ClassID == sc.ClassID)
+                    {
+                        enrolled = true;
+                        count++;
+                    }
+                    /*
+                    else if(loopTracker == (classCount-1))
+                    {
+                        <td>No</td>
+                    }*/
+                    loopTracker++;
                 }
+            }
+            else
+            {
+                <td>No</td>
+            }
             <td>
                 <form method="post">
                     @if (!enrolled)
@@ -75,29 +101,29 @@
                         <input type="hidden" name="id" asp-for="Student.StudentID" />
                         <input type="hidden" name="classid" asp-for="@item.ClassID" />
                         <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" />
-                    }
-                    else
-                    {
-                        <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" disabled />
-                    }
-                </form>
-            </td>
-            <td>
-          
-                <form method="post">
-                    @if (enrolled)
-                    {
-                        <input type="hidden" name="id" asp-for="Student.StudentID" />
-                        <input type="hidden" name="classid" asp-for="@item.ClassID" />
-                        <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" />
-                    }
-                    else
-                    {
-                        <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" disabled/>
-                    }
-                </form>
-            </td>
-            </tr>
+            }
+            else
+            {
+                <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" disabled />
+            }
+                    </form>
+                    </td>
+                    <td>
+
+                        <form method="post">
+                            @if (enrolled)
+                            {
+                                <input type="hidden" name="id" asp-for="Student.StudentID" />
+                                <input type="hidden" name="classid" asp-for="@item.ClassID" />
+                                <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" />
+                            }
+                            else
+                            {
+                                <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" disabled />
+                            }
+                        </form>
+                    </td>
+                </tr>
         }
     </tbody>
 </table>
@@ -144,13 +170,25 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-<script>
+    <script>
     $(document).ready(function () {
         var classSchedules = @Html.Raw(Json.Serialize(Model.classSchedules));
+        var publicClassSchedules = @Html.Raw(Json.Serialize(Model.publicClassSchedules));
+
         classSchedules.forEach(function (classSchedule) {
-            
-            var clas = classSchedule.class;
+            var className = classSchedule.class.course.name;
             var schedule = classSchedule.schedule;
+            AddSchedule(schedule, className, 'table-info');
+
+        });
+
+        publicClassSchedules.forEach(function (publicClass) {
+            var className = publicClass.studentPublicSchoolClass.courseName;
+            var schedule = publicClass.schedule;
+            AddSchedule(schedule, className, 'table-success');
+        });
+
+        function AddSchedule(schedule, className, tableColor) {
             var startTime = new Date(schedule.startTime);
             var endTime = new Date(schedule.endTime);
             var dayOfWeek = schedule.dayOfWeek;
@@ -161,13 +199,13 @@
             }
 
             var node = document.createElement("p");
-            var className = document.createTextNode(clas.course.name);
+            var className = document.createTextNode(className);
 
             node.appendChild(className);
 
             var element = $('#' + dayOfWeek + '_' + startTime.getHours());
             element.attr("rowspan", rowspan);
-            element.addClass("table-info");
+            element.addClass(tableColor);
             document.getElementById(dayOfWeek + '_' + startTime.getHours()).appendChild(node);
 
             var elementToDelete = $('#' + dayOfWeek + '_2_' + startTime.getHours());
@@ -187,8 +225,8 @@
 
                 i++;
             }
+        }
 
-        });
     });
-</script>
+    </script>
 }

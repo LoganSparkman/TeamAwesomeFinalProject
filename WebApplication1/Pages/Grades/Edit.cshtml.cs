@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using WebApplication1.Utility;
 
-namespace WebApplication1.Pages.Students
+namespace WebApplication1.Pages.Grades
 {
+    [Authorize(Roles = SD.InstructorUser)]
     public class EditModel : PageModel
     {
         private readonly WebApplication1.Data.ApplicationDbContext _context;
@@ -22,23 +24,28 @@ namespace WebApplication1.Pages.Students
         }
 
         [BindProperty]
-        public Student Student { get; set; }
+        public StudentAssessment StudentAssessment { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? StudentId, int? AssesmentId)
         {
-            if (id == null)
+            if (StudentId == null || AssesmentId == null)
             {
                 return NotFound();
             }
 
-            Student = await _context.Student
-                .Include(s => s.StudentStatus).FirstOrDefaultAsync(m => m.StudentID == id);
+            StudentAssessment = await _context.StudentAssessment
+                .Include(s => s.Assessment)
+                .Include(s => s.Student)
+                .Where(s => s.AssessmentID == AssesmentId)
+                .Where(s => s.StudentID == StudentId)
+                .FirstOrDefaultAsync();
 
-            if (Student == null)
+            if (StudentAssessment == null)
             {
                 return NotFound();
             }
-           ViewData["StudentStatusID"] = new SelectList(_context.StudentStatus, "StudentStatusID", "Name");
+           ViewData["AssessmentID"] = new SelectList(_context.Assessment, "AssessmentId", "Title");
+           ViewData["StudentID"] = new SelectList(_context.Student, "StudentID", "FirstName");
             return Page();
         }
 
@@ -49,24 +56,7 @@ namespace WebApplication1.Pages.Students
                 return Page();
             }
 
-            var files = HttpContext.Request.Form.Files;
-
-            if (files.Count > 0)
-            {
-                byte[] pic = null;
-
-                using (var fs = files[0].OpenReadStream())
-                {
-                    using (var ms = new MemoryStream())
-                    {
-                        fs.CopyTo(ms);
-                        pic = ms.ToArray();
-                    }
-                }
-                Student.Picture = pic;
-            }
-
-            _context.Attach(Student).State = EntityState.Modified;
+            _context.Attach(StudentAssessment).State = EntityState.Modified;
 
             try
             {
@@ -74,7 +64,7 @@ namespace WebApplication1.Pages.Students
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!StudentExists(Student.StudentID))
+                if (!StudentAssessmentExists(StudentAssessment.StudentID))
                 {
                     return NotFound();
                 }
@@ -84,12 +74,12 @@ namespace WebApplication1.Pages.Students
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./ClassList");
         }
 
-        private bool StudentExists(int id)
+        private bool StudentAssessmentExists(int id)
         {
-            return _context.Student.Any(e => e.StudentID == id);
+            return _context.StudentAssessment.Any(e => e.StudentID == id);
         }
     }
 }

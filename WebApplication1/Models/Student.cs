@@ -22,6 +22,7 @@ namespace WebApplication1.Models
         [Display(Name = "Date of Birth")]
         [Required]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         [StringLength(50)]
         public string Address { get; set; }
@@ -49,9 +50,13 @@ namespace WebApplication1.Models
         [StringLength(20)]
         public string Phone { get; set; }
         public byte[] Picture { get; set; }//Possible change to string path. Up to whoever uses it first
-        [Display(Name = "StudentStatus")]
+        [Display(Name = "Student Status")]
         [Required]
         public int StudentStatusID { get; set; }
+        [Display(Name = "English Level")]
+        public short EnglishLevel { get; set; }
+        [Display(Name = "IT Level")]
+        public short ITLevel { get; set; }
 
         [ForeignKey("StudentStatusID")]
         public virtual StudentStatus StudentStatus { get; set; }

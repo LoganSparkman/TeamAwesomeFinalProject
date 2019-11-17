@@ -1,0 +1,43 @@
+﻿@page
+@model WebApplication1.Pages.Assessments.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Assessment</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assessment.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assessment.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assessment.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assessment.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assessment.PointsPossible)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assessment.PointsPossible)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assessment.Class)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Assessment.Class.ClassID)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Assessment.AssessmentId">Edit</a> |
+    <a asp-page="./Index" asp-route-id="@Model.Assessment.ClassID">Back to List</a>
+</div>

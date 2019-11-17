@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using WebApplication1.Utility;
 
-namespace WebApplication1.Pages.Classes
+namespace WebApplication1.Pages.Grades
 {
+    [Authorize(Roles = SD.InstructorUser)]
     public class DetailsModel : PageModel
     {
         private readonly WebApplication1.Data.ApplicationDbContext _context;
@@ -19,22 +22,23 @@ namespace WebApplication1.Pages.Classes
             _context = context;
         }
 
-        public List<ClassSchedule> ClassSchedule { get; set; }
+        public StudentAssessment StudentAssessment { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? StudentId, int? AssesmentId)
         {
-            if (id == null)
+            if (StudentId == null || AssesmentId == null)
             {
                 return NotFound();
             }
 
-            ClassSchedule = await _context.ClassSchedule
-                .Include(c => c.Class)
-                .Include(c => c.Schedule)
-                .Include(c => c.Class.Course)
-                .Include(c => c.Class.Term).Where(m => m.ClassID == id).ToListAsync();
+            StudentAssessment = await _context.StudentAssessment
+                .Include(s => s.Assessment)
+                .Include(s => s.Student)
+                .Where(s => s.AssessmentID == AssesmentId)
+                .Where(s => s.StudentID == StudentId)
+                .FirstOrDefaultAsync();
 
-            if (ClassSchedule == null)
+            if (StudentAssessment == null)
             {
                 return NotFound();
             }

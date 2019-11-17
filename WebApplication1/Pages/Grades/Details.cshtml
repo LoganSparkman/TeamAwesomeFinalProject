@@ -1,0 +1,54 @@
+﻿@page
+@model WebApplication1.Pages.Grades.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Student Grade</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAssessment.PointsAwarded)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentAssessment.PointsAwarded)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAssessment.Assessment.PointsPossible)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentAssessment.Assessment.PointsPossible)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAssessment.Comment)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentAssessment.Comment)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAssessment.Assessment)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentAssessment.Assessment.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAssessment.Student.FirstName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentAssessment.Student.FirstName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAssessment.Student.LastName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentAssessment.Student.LastName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-AssesmentId="@Model.StudentAssessment.AssessmentID" asp-route-StudentId="@Model.StudentAssessment.StudentID">Edit</a> 
+</div>
