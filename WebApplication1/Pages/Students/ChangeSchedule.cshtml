@@ -8,7 +8,7 @@
 <h1>Change Schedule</h1>
 
 <h4>@Model.Student.FirstName @Model.Student.LastName</h4>
-
+<h4>IT Level: @Model.Student.ITLevel English Level: @Model.Student.EnglishLevel</h4>
 
 <form method="post">
     <div class="form-group">
@@ -39,74 +39,91 @@
     <tbody>
         @foreach (var item in Model.Class)
         {
+            int itLevel = Model.Student.ITLevel;
+            int engLevel = Model.Student.EnglishLevel;
             var count = 0;
             var enrolled = false;
             var timeCounter = 0;
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Capacity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Course.Name)
-            </td>
+            string courseName = item.Course.Name;
+            int courseLevel = (int)Char.GetNumericValue(courseName[courseName.Length - 1]);
+            bool display = false;
 
-            @foreach (var i in Model.ClassSchedule)
+            @if (item.Course.Name[0] == 'E' && courseLevel == (engLevel + 1))
             {
+                display = true;
+            }
+            else if (item.Course.Name[0] == 'I' && courseLevel == (itLevel + 1))
+            {
+                display = true;
+            }
 
-                @if (i.ClassID == item.ClassID)
-                {
-                    @foreach (var schedule in Model.Schedule)
+            @if (display)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Capacity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Course.Name)
+                    </td>
+
+                    @foreach (var i in Model.ClassSchedule)
                     {
-                        @if (schedule.ScheduleID == i.ScheduleID && timeCounter == 0)
-                        {
 
-                            <td>@schedule.StartTime.ToString().Substring(10)</td>
-                            <td>@schedule.EndTime.ToString().Substring(10)</td>
-                            timeCounter++;
+                        @if (i.ClassID == item.ClassID)
+                        {
+                            @foreach (var schedule in Model.Schedule)
+                            {
+                                @if (schedule.ScheduleID == i.ScheduleID && timeCounter == 0)
+                                {
+
+                                    <td>@schedule.StartTime.ToString().Substring(10)</td>
+                                    <td>@schedule.EndTime.ToString().Substring(10)</td>
+                                    timeCounter++;
+                                }
+                            }
                         }
                     }
-                }
-            }
-            @if (Model.StudentClass.Count > 0)
-            {
-                var classCount = Model.StudentClass.Count;
-                var loopTracker = 0;
-                @foreach (var sc in Model.StudentClass)
-                {
-                    @if (count > 0)
+                    @if (Model.StudentClass.Count > 0)
                     {
-                        break;
+                        var classCount = Model.StudentClass.Count;
+                        var loopTracker = 0;
+                        @foreach (var sc in Model.StudentClass)
+                        {
+                            @if (count > 0)
+                            {
+                                break;
+                            }
+                            @if (Model.Student.StudentID == sc.StudentID && item.ClassID == sc.ClassID)
+                            {
+                                enrolled = true;
+                                count++;
+                            }
+                            /*
+                            else if(loopTracker == (classCount-1))
+                            {
+                                <td>No</td>
+                            }*/
+                            loopTracker++;
+                        }
                     }
-                    @if (Model.Student.StudentID == sc.StudentID && item.ClassID == sc.ClassID)
-                    {
-                        enrolled = true;
-                        count++;
-                    }
-                    /*
-                    else if(loopTracker == (classCount-1))
+                    else
                     {
                         <td>No</td>
-                    }*/
-                    loopTracker++;
-                }
-            }
-            else
-            {
-                <td>No</td>
-            }
-            <td>
-                <form method="post">
-                    @if (!enrolled)
-                    {
-                        <input type="hidden" name="id" asp-for="Student.StudentID" />
-                        <input type="hidden" name="classid" asp-for="@item.ClassID" />
-                        <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" />
-            }
-            else
-            {
-                <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" disabled />
-            }
-                    </form>
+                    }
+                    <td>
+                        <form method="post">
+                            @if (!enrolled)
+                            {
+                                <input type="hidden" name="id" asp-for="Student.StudentID" />
+                                <input type="hidden" name="classid" asp-for="@item.ClassID" />
+                                <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" />
+                            }
+                            else
+                            {
+                                <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" disabled />
+                            }
+                        </form>
                     </td>
                     <td>
 
@@ -124,6 +141,7 @@
                         </form>
                     </td>
                 </tr>
+            }
         }
     </tbody>
 </table>
