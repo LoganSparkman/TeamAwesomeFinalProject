@@ -54,6 +54,10 @@
                 {
                     <a class="list-group-item list-group-item-action bg-light" asp-area="" asp-page="/Grades/ClassList">Grades <i class="fas fa-edit" style="position:absolute; right: 15px; top:14px;"></i></a>
                 }
+                @if (User.IsInRole(SD.InstructorUser))
+                {
+                    <a class="list-group-item list-group-item-action bg-light" asp-area="" asp-page="/Attendance/ClassList">Attendance<i class="fas fa-edit" style="position:absolute; right: 15px; top:14px;"></i></a>
+                }
                 <a class="list-group-item list-group-item-action bg-light" asp-area="" asp-page="/Index">Terms <i class="far fa-calendar-alt" style="position:absolute; right: 17px; top:14px;"></i></a>
             </div>
         </div>
