@@ -4,14 +4,44 @@
     ViewData["Title"] = "Enter Attendance";
 }
 
+<link rel="stylesheet" href="~/css/site.css" />
+
 <h1>Enter Attendance</h1>
 
 <h4>Class ID: @Model.classId</h4>
 
 <body>
+    <!--
     <form method="post" enctype="multipart/form-data">
         <input type="file" name="postedFile" class="btn btn-info" />
         <input type="submit" value="Import" class="btn btn-primary" asp-page-handler="Import" />
+    </form>-->
+    <form method="post" enctype="multipart/form-data" class="frame">
+        <div class="center">
+            <div class="title">
+                <h1 id="fileName"></h1>
+            </div>
+
+            <div class="dropzone" id="fileInput">
+                <img src="http://100dayscss.com/codepen/upload.svg" class="upload-icon" />
+                <input type="file" name="postedFile" class="upload-input" />
+            </div>
+
+            <input type="submit" value="Upload File" class="submitformbtn" name="uploadbutton" asp-page-handler="Import"/>
+
+        </div>
     </form>
+
 </body>
+
+@section Scripts{ 
+<script>
+        $('input[type="file"]').change(function(e){
+            var fileName = e.target.files[0].name;
+            document.getElementById('fileName').innerText = fileName;
+        });
+</script>
+}
+
+
 
