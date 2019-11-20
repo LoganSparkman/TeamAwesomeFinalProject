@@ -4,150 +4,193 @@
 @{
     ViewData["Title"] = "ChangeSchedule";
 }
+<link rel="stylesheet" href="~/css/print.css" />
 
-<h1>Change Schedule</h1>
+<h1>@Model.Student.FirstName @Model.Student.LastName</h1>
 
-<h4>@Model.Student.FirstName @Model.Student.LastName</h4>
-<h4>IT Level: @Model.Student.ITLevel English Level: @Model.Student.EnglishLevel</h4>
+<div id="notPrinting">
+    <h4>IT Level: @Model.Student.ITLevel</h4>
+    <h4>English Level: @Model.Student.EnglishLevel</h4>
+    <hr />
 
-<form method="post">
-    <div class="form-group">
-        <h4>Filter by term</h4>
-        <select asp-for="Term.TermID" name="termid" class="form-control" asp-items="ViewBag.TermID"></select>
-    </div>
-    <input type="hidden" name="id" asp-for="Student.StudentID" />
-    <input type="submit" value="Filter" class="btn btn-primary" asp-page-handler="Filter" />
-</form>
-<hr />
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Class[0].Capacity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Class[0].Course)
-            </th>
-            <th>
-                Start Time
-            </th>
-            <th>
-                End Time
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Class)
-        {
-            int itLevel = Model.Student.ITLevel;
-            int engLevel = Model.Student.EnglishLevel;
-            var count = 0;
-            var enrolled = false;
-            var timeCounter = 0;
-            string courseName = item.Course.Name;
-            int courseLevel = (int)Char.GetNumericValue(courseName[courseName.Length - 1]);
-            bool display = false;
+    <form method="post">
+        <div class="form-group">
+            <h4>Filter by term</h4>
+            <select asp-for="Term.TermID" name="termid" class="form-control" asp-items="ViewBag.TermID"></select>
+        </div>
+        <input type="hidden" name="id" asp-for="Student.StudentID" />
+        <input type="submit" value="Filter" class="btn btn-primary" asp-page-handler="Filter" />
+    </form>
+    <br />
 
-            @if (item.Course.Name[0] == 'E' && courseLevel == (engLevel + 1))
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Class[0].Capacity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Class[0].Course)
+                </th>
+                <th>
+                    Days
+                </th>
+                <th>
+                    Start Time
+                </th>
+                <th>
+                    End Time
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Class)
             {
-                display = true;
-            }
-            else if (item.Course.Name[0] == 'I' && courseLevel == (itLevel + 1))
-            {
-                display = true;
-            }
+                int itLevel = Model.Student.ITLevel;
+                int engLevel = Model.Student.EnglishLevel;
+                var count = 0;
+                var enrolled = false;
+                var timeCounter = 0;
+                string courseName = item.Course.Name;
+                int courseLevel = (int)Char.GetNumericValue(courseName[courseName.Length - 1]);
+                bool display = false;
 
-            @if (display)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Capacity)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Course.Name)
-                    </td>
+                @if (item.Course.Name[0] == 'E' && courseLevel == (engLevel + 1))
+                {
+                    display = true;
+                }
+                else if (item.Course.Name[0] == 'I' && courseLevel == (itLevel + 1))
+                {
+                    display = true;
+                }
 
-                    @foreach (var i in Model.ClassSchedule)
-                    {
-
-                        @if (i.ClassID == item.ClassID)
-                        {
-                            @foreach (var schedule in Model.Schedule)
+                @if (display)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Capacity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Course.Name)
+                        </td>
+                        <td>
+                            @foreach (var i in Model.ClassSchedule)
                             {
-                                @if (schedule.ScheduleID == i.ScheduleID && timeCounter == 0)
-                                {
 
-                                    <td>@schedule.StartTime.ToString().Substring(10)</td>
-                                    <td>@schedule.EndTime.ToString().Substring(10)</td>
-                                    timeCounter++;
+                                @if (i.ClassID == item.ClassID)
+                                {
+                                    @foreach (var schedule in Model.Schedule)
+                                    {
+                                        @if (schedule.ScheduleID == i.ScheduleID)
+                                        {
+                                            @switch (schedule.DayOfWeek)
+                                            {
+                                                case 1:
+                                                    <text>M</text>
+                                                    break;
+                                                case 2:
+                                                    <text>T</text>
+                                                    break;
+                                                case 3:
+                                                    <text>W</text>
+                                                    break;
+                                                case 4:
+                                                    <text>Th</text>
+                                                    break;
+                                                case 5:
+                                                    <text>F</text>
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        </td>
+                        @foreach (var i in Model.ClassSchedule)
+                        {
+
+                            @if (i.ClassID == item.ClassID)
+                            {
+                                @foreach (var schedule in Model.Schedule)
+                                {
+                                    @if (schedule.ScheduleID == i.ScheduleID && timeCounter == 0)
+                                    {
+                                        <td>@schedule.StartTime.ToString().Substring(10)</td>
+                                        <td>@schedule.EndTime.ToString().Substring(10)</td>
+                                        timeCounter++;
+                                    }
                                 }
                             }
                         }
-                    }
-                    @if (Model.StudentClass.Count > 0)
-                    {
-                        var classCount = Model.StudentClass.Count;
-                        var loopTracker = 0;
-                        @foreach (var sc in Model.StudentClass)
+                        @if (Model.StudentClass.Count > 0)
                         {
-                            @if (count > 0)
+                            var classCount = Model.StudentClass.Count;
+                            var loopTracker = 0;
+                            @foreach (var sc in Model.StudentClass)
                             {
-                                break;
+                                @if (count > 0)
+                                {
+                                    break;
+                                }
+                                @if (Model.Student.StudentID == sc.StudentID && item.ClassID == sc.ClassID)
+                                {
+                                    enrolled = true;
+                                    count++;
+                                }
+                                /*
+                                else if(loopTracker == (classCount-1))
+                                {
+                                    <td>No</td>
+                                }*/
+                                loopTracker++;
                             }
-                            @if (Model.Student.StudentID == sc.StudentID && item.ClassID == sc.ClassID)
-                            {
-                                enrolled = true;
-                                count++;
-                            }
-                            /*
-                            else if(loopTracker == (classCount-1))
-                            {
-                                <td>No</td>
-                            }*/
-                            loopTracker++;
                         }
-                    }
-                    else
-                    {
-                        <td>No</td>
-                    }
-                    <td>
-                        <form method="post">
-                            @if (!enrolled)
-                            {
-                                <input type="hidden" name="id" asp-for="Student.StudentID" />
-                                <input type="hidden" name="classid" asp-for="@item.ClassID" />
-                                <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" />
-                            }
-                            else
-                            {
-                                <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" disabled />
-                            }
-                        </form>
-                    </td>
-                    <td>
+                        else
+                        {
+                            <td>No</td>
+                        }
+                        <td>
+                            <form method="post">
+                                @if (!enrolled)
+                                {
+                                    <input type="hidden" name="id" asp-for="Student.StudentID" />
+                                    <input type="hidden" name="classid" asp-for="@item.ClassID" />
+                                    <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" />
+                                }
+                                else
+                                {
+                                    <input type="submit" value="Add" class="btn btn-primary" asp-page-handler="Add" disabled />
+                                }
+                            </form>
+                        </td>
+                        <td>
 
-                        <form method="post">
-                            @if (enrolled)
-                            {
-                                <input type="hidden" name="id" asp-for="Student.StudentID" />
-                                <input type="hidden" name="classid" asp-for="@item.ClassID" />
-                                <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" />
-                            }
-                            else
-                            {
-                                <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" disabled />
-                            }
-                        </form>
-                    </td>
-                </tr>
+                            <form method="post">
+                                @if (enrolled)
+                                {
+                                    <input type="hidden" name="id" asp-for="Student.StudentID" />
+                                    <input type="hidden" name="classid" asp-for="@item.ClassID" />
+                                    <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" />
+                                }
+                                else
+                                {
+                                    <input type="submit" value="Remove" class="btn btn-danger" asp-page-handler="Remove" disabled />
+                                }
+                            </form>
+                        </td>
+                    </tr>
+                }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
+    <div>
+        <a asp-page="./Index">Back to List</a>
+        <button class="btn btn-success float-right" onclick="PrintSchedule()">Print Schedule</button>
+    </div>
+    <br />
 </div>
 
 <table class="table table-bordered" style="table-layout: fixed; width: 100%;">
@@ -189,23 +232,6 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
-    $(document).ready(function () {
-        var classSchedules = @Html.Raw(Json.Serialize(Model.classSchedules));
-        var publicClassSchedules = @Html.Raw(Json.Serialize(Model.publicClassSchedules));
-
-        classSchedules.forEach(function (classSchedule) {
-            var className = classSchedule.class.course.name;
-            var schedule = classSchedule.schedule;
-            AddSchedule(schedule, className, 'table-info');
-
-        });
-
-        publicClassSchedules.forEach(function (publicClass) {
-            var className = publicClass.studentPublicSchoolClass.courseName;
-            var schedule = publicClass.schedule;
-            AddSchedule(schedule, className, 'table-success');
-        });
-
         function AddSchedule(schedule, className, tableColor) {
             var startTime = new Date(schedule.startTime);
             var endTime = new Date(schedule.endTime);
@@ -245,6 +271,25 @@
             }
         }
 
+        function PrintSchedule() {
+            window.print();
+        }
+    $(document).ready(function () {
+        var classSchedules = @Html.Raw(Json.Serialize(Model.classSchedules));
+        var publicClassSchedules = @Html.Raw(Json.Serialize(Model.publicClassSchedules));
+
+        classSchedules.forEach(function (classSchedule) {
+            var className = classSchedule.class.course.name;
+            var schedule = classSchedule.schedule;
+            AddSchedule(schedule, className, 'table-info');
+
+        });
+
+        publicClassSchedules.forEach(function (publicClass) {
+            var className = publicClass.studentPublicSchoolClass.courseName;
+            var schedule = publicClass.schedule;
+            AddSchedule(schedule, className, 'table-success');
+        });
     });
     </script>
 }
