@@ -27,24 +27,35 @@
     <tbody>
         @foreach (var item in Model.Class)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Course.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Term.Description)
-                </td>
-                @foreach (var attendance in Model.LastEnteredAttendance)
+        bool attendanceFound = false;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Term.Description)
+            </td>
+            @foreach (var attendance in Model.LastEnteredAttendance)
+            {
+                @if (attendance.ClassID == item.ClassID)
                 {
-                    @if (attendance.ClassID == item.ClassID)
+                    @if (attendance.Date != null)
                     {
-                        @if (attendance.Date != null)
-                        {
-                            <td>@attendance.Date.ToString().Substring(0, 10)</td>
-                        }
+                        attendanceFound = true;
+                        <td>@attendance.Date.ToString().Substring(0, 10)</td>
                     }
+
                 }
-            </tr>
+            }
+            @if (!attendanceFound)
+            {
+                <td>No attendance data entered</td>
+            }
+            <td>
+                <a asp-page="./RunClassReport" asp-route-classId="@item.ClassID">Attendance Report</a>
+            </td>
+
+        </tr>
         }
     </tbody>
 </table>
