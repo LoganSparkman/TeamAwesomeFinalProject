@@ -117,8 +117,14 @@
                                 {
                                     @if (schedule.ScheduleID == i.ScheduleID && timeCounter == 0)
                                     {
-                                        <td>@schedule.StartTime.ToString().Substring(10)</td>
-                                        <td>@schedule.EndTime.ToString().Substring(10)</td>
+                                        string startTime = @schedule.StartTime.ToString().Substring(10);
+                                        string endTime = @schedule.EndTime.ToString().Substring(10);
+                                        string startAmOrPm = startTime.Substring(startTime.LastIndexOf(' ') + 1);
+                                        string endAmOrPm = endTime.Substring(endTime.LastIndexOf(' ') + 1);
+                                        startTime = startTime.Split(':')[0];
+                                        endTime = endTime.Split(':')[0];
+                                        <td>@startTime @startAmOrPm</td>
+                                        <td>@endTime  @endAmOrPm</td>
                                         timeCounter++;
                                     }
                                 }
