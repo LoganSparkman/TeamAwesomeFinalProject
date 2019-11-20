@@ -50,10 +50,16 @@
             @if (!attendanceFound)
             {
                 <td>No attendance data entered</td>
+                <td>
+                    <input type="submit" class="btn btn-info" asp-page="./RunClassReport" asp-route-classId="@item.ClassID" value="Attendance Report" disabled/>
+                </td>
             }
-            <td>
-                <a asp-page="./RunClassReport" asp-route-classId="@item.ClassID">Attendance Report</a>
-            </td>
+            else
+            {
+                <td>
+                    <a class="btn btn-info" asp-page="./RunClassReport" asp-route-classId="@item.ClassID">Attendance Report</a>
+                </td>
+            }
 
         </tr>
         }
