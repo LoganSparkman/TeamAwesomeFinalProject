@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 using WebApplication1.Utility;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using OfficeOpenXml;
 
 namespace WebApplication1.Pages.Attendance
 {
@@ -25,6 +28,7 @@ namespace WebApplication1.Pages.Attendance
         }
 
         public IList<Class> Class { get; set; }
+        public IList<Models.Attendance> LastEnteredAttendance { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -45,6 +49,35 @@ namespace WebApplication1.Pages.Attendance
                     .Include(c => c.Term)
                     .Where(c => c.ClassID == Classes[i].ClassID).FirstOrDefaultAsync());
             }
+
+            //get the last entered attendance for classes
+            LastEnteredAttendance = await _context.Attendance
+                    .OrderByDescending(d => d.Date)
+                    .GroupBy(c => c.ClassID)
+                    .Select(c => c.First())
+                    .ToListAsync();
+        }
+
+        public IActionResult OnPostImport(IFormFile postedFile)
+        {
+            if (postedFile != null)
+            {
+                using (ExcelPackage package = new ExcelPackage(postedFile.OpenReadStream()))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                    int colCount = worksheet.Dimension.End.Column;  //get Column Count
+                    int rowCount = worksheet.Dimension.End.Row;     //get row count
+
+                    for (int row = 1; row <= rowCount; row++)
+                    {
+                        for (int col = 1; col <= colCount; col++)
+                        {
+                            string currentThing = " Row:" + row + " column:" + col + " Value:" + worksheet.Cells[row, col].Value?.ToString().Trim();
+                        }
+                    }
+                }
+            }
+            return RedirectToPage("./ClassList");
         }
     }
 }

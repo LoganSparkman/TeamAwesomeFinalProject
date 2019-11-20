@@ -5,19 +5,21 @@
     ViewData["Title"] = "Class List";
 }
 
+<link rel="stylesheet" href="~/css/site.css" />
+
 <h1>Your Classes</h1>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Class[0].Capacity)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Class[0].Course)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Class[0].Term)
+            </th>
+            <th>
+                Last Attendance Entered
             </th>
             <th></th>
         </tr>
@@ -27,19 +29,53 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Capacity)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Course.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Term.TermID)
+                    @Html.DisplayFor(modelItem => item.Term.Description)
                 </td>
-                <td>
-                    <a asp-page="./EnterAttendance" asp-route-classId="@item.ClassID">Attendance</a>
-                </td>
+                @foreach (var attendance in Model.LastEnteredAttendance)
+                {
+                    @if (attendance.ClassID == item.ClassID)
+                    {
+                        @if (attendance.Date != null)
+                        {
+                            <td>@attendance.Date.ToString().Substring(0, 10)</td>
+                        }
+                    }
+                }
             </tr>
         }
     </tbody>
 </table>
+
+<br />
+<br />
+
+<form method="post" enctype="multipart/form-data" class="frame">
+    <div class="center">
+        <div class="title">
+            <h1 class="h1uploadbox" id="fileName">No File Selected</h1>
+        </div>
+
+        <div class="dropzone" id="fileInput">
+            <img src="http://100dayscss.com/codepen/upload.svg" class="upload-icon" />
+            <input type="file" name="postedFile" class="upload-input" />
+        </div>
+
+        <input type="submit" value="Upload File" class="submitformbtn" name="uploadbutton" asp-page-handler="Import" />
+
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        $('input[type="file"]').change(function(e){
+            var fileName = e.target.files[0].name;
+            document.getElementById('fileName').innerText = fileName;
+        });
+    </script>
+}
+
+
 
