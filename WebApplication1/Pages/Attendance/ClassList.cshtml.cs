@@ -58,7 +58,7 @@ namespace WebApplication1.Pages.Attendance
                     .ToListAsync();
         }
 
-        public IActionResult OnPostImport(IFormFile postedFile)
+        public async Task<IActionResult> OnPostImport(IFormFile postedFile)
         {
             if (postedFile != null)
             {
@@ -70,10 +70,60 @@ namespace WebApplication1.Pages.Attendance
 
                     for (int row = 1; row <= rowCount; row++)
                     {
+                        int ClassID = 0;
+                        int StudentID = 0;
+                        DateTime Date = new DateTime();
+                        DateTime TimeIn = new DateTime();
+                        DateTime TimeOut = new DateTime();
+                        int AttendanceStatusID = 1;
+                        Models.Attendance tempAttendance = new Models.Attendance();
                         for (int col = 1; col <= colCount; col++)
                         {
                             string currentThing = " Row:" + row + " column:" + col + " Value:" + worksheet.Cells[row, col].Value?.ToString().Trim();
+
+                            if(col == 1)
+                            {
+                                ClassID = Int32.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
+                            }
+                            else if (col == 2)
+                            {
+                                StudentID = Int32.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
+                            }
+                            else if (col == 3)
+                            {
+                                Date = DateTime.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
+                            }
+                            else if (col == 4)
+                            {
+                                string tempDate = worksheet.Cells[row, col].Value?.ToString().Trim();
+                                double date = double.Parse(tempDate);
+                                TimeIn = DateTime.FromOADate(date);
+                                //TimeIn = DateTime.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
+                            }
+                            else if (col == 5)
+                            {
+                                string tempDate = worksheet.Cells[row, col].Value?.ToString().Trim();
+                                double date = double.Parse(tempDate);
+                                TimeOut = DateTime.FromOADate(date);
+                                //TimeOut = DateTime.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
+                            }
+                            else if (col == 6)
+                            {
+                                AttendanceStatusID = Int32.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
+                            }
+
                         }
+                        tempAttendance.ClassID = ClassID;
+                        tempAttendance.StudentID = StudentID;
+                        tempAttendance.Date = Date;
+                        tempAttendance.TimeIn = TimeIn;
+                        tempAttendance.TimeOut = TimeOut;
+                        tempAttendance.AttendanceStatusID = AttendanceStatusID;
+
+                        _context.Attendance.Add(tempAttendance);
+                        await _context.SaveChangesAsync();
+
+                        string test = ClassID.ToString() + " " + StudentID.ToString();
                     }
                 }
             }
