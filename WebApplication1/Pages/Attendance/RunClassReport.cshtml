@@ -12,9 +12,9 @@
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ['Task', 'Attendance'],
-          ['Attended',     30],
-          ['Absent',      7],
-          ['Late',  9],
+          ['Attended',     @Model.attended],
+          ['Absent',      @Model.absent],
+          ['Late',  @Model.late],
         ]);
 
         var options = {

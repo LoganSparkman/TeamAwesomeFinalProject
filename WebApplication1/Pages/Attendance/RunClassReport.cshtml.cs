@@ -13,7 +13,13 @@ namespace WebApplication1.Pages.Attendance
     {
         public Course Course { get; set; }
 
+        public int attended;
+        public int late;
+        public int absent;
+
         public IList<Class> Class { get; set; }
+
+        public IList<Models.Attendance> Attendance { get; set; }
 
         private readonly WebApplication1.Data.ApplicationDbContext _context;
         public RunClassReportModel(WebApplication1.Data.ApplicationDbContext context)
@@ -31,11 +37,31 @@ namespace WebApplication1.Pages.Attendance
                     .Where(c => c.ClassID == classId)
                     .ToListAsync();
 
+            Attendance = await _context.Attendance
+                         .Where(c => c.ClassID == classId)
+                         .ToListAsync();
+
             for(int i = 0; i < Class.Count; i++)
             {
                 Course = await _context.Course
                         .Where(c => c.CourseID == Class[i].CourseID)
                         .FirstOrDefaultAsync();
+            }
+
+            foreach (var attendance in Attendance)
+            {
+                if(attendance.AttendanceStatusID == 1)
+                {
+                    attended++;
+                }
+                else if(attendance.AttendanceStatusID == 2)
+                {
+                    late++;
+                }
+                else
+                {
+                    absent++;
+                }
             }
 
         }
