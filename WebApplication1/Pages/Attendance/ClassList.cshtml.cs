@@ -30,6 +30,10 @@ namespace WebApplication1.Pages.Attendance
         public IList<Class> Class { get; set; }
         public IList<Models.Attendance> LastEnteredAttendance { get; set; }
 
+        public bool alert { get; set; }
+
+        public IList<Models.Attendance> Attendance { get; set; }
+
         public async Task OnGetAsync()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -77,9 +81,10 @@ namespace WebApplication1.Pages.Attendance
                         DateTime TimeOut = new DateTime();
                         int AttendanceStatusID = 1;
                         Models.Attendance tempAttendance = new Models.Attendance();
+
                         for (int col = 1; col <= colCount; col++)
                         {
-                            string currentThing = " Row:" + row + " column:" + col + " Value:" + worksheet.Cells[row, col].Value?.ToString().Trim();
+                            //string currentThing = " Row:" + row + " column:" + col + " Value:" + worksheet.Cells[row, col].Value?.ToString().Trim();
 
                             if(col == 1)
                             {
@@ -98,14 +103,12 @@ namespace WebApplication1.Pages.Attendance
                                 string tempDate = worksheet.Cells[row, col].Value?.ToString().Trim();
                                 double date = double.Parse(tempDate);
                                 TimeIn = DateTime.FromOADate(date);
-                                //TimeIn = DateTime.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
                             }
                             else if (col == 5)
                             {
                                 string tempDate = worksheet.Cells[row, col].Value?.ToString().Trim();
                                 double date = double.Parse(tempDate);
                                 TimeOut = DateTime.FromOADate(date);
-                                //TimeOut = DateTime.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
                             }
                             else if (col == 6)
                             {
@@ -120,8 +123,15 @@ namespace WebApplication1.Pages.Attendance
                         tempAttendance.TimeOut = TimeOut;
                         tempAttendance.AttendanceStatusID = AttendanceStatusID;
 
-                        _context.Attendance.Add(tempAttendance);
-                        await _context.SaveChangesAsync();
+                        try
+                        {
+                            _context.Attendance.Add(tempAttendance);
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (DbUpdateException)
+                        {
+                            return RedirectToPage("./ClassList");
+                        }
 
                         string test = ClassID.ToString() + " " + StudentID.ToString();
                     }
