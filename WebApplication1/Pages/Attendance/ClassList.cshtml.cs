@@ -30,8 +30,6 @@ namespace WebApplication1.Pages.Attendance
         public IList<Class> Class { get; set; }
         public IList<Models.Attendance> LastEnteredAttendance { get; set; }
 
-        public bool alert { get; set; }
-
         public IList<Models.Attendance> Attendance { get; set; }
 
         public async Task OnGetAsync()
@@ -130,7 +128,7 @@ namespace WebApplication1.Pages.Attendance
                         }
                         catch (DbUpdateException)
                         {
-                            return RedirectToPage("./ClassList");
+                            TempData["Message"] = "Error";
                         }
 
                         string test = ClassID.ToString() + " " + StudentID.ToString();

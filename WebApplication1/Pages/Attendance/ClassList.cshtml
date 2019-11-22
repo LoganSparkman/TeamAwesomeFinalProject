@@ -7,11 +7,13 @@
 
 <link rel="stylesheet" href="~/css/site.css" />
 
+@if (TempData.ContainsKey("Message"))
+{
+    <script>alert("Attendance has already been loaded for that class and day");</script>
+    @TempData.Remove("Message");
+}
+
 <body>
-    @if (Model.alert)
-    {
-        <script>alert("Alert!!!");</script>
-    }
     <h1>Your Classes</h1>
     <table class="table">
         <thead>
@@ -92,7 +94,7 @@
 </body>
 @section Scripts{
     <script>
-        $('input[type="file"]').change(function(e){
+        $('input[type="file"]').change(function (e) {
             var fileName = e.target.files[0].name;
             document.getElementById('fileName').innerText = fileName;
         });
