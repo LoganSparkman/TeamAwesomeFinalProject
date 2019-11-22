@@ -44,7 +44,7 @@ namespace WebApplication1.Pages.Students
 
             CurrentFilter = searchString;
 
-            IQueryable<Student> studentIQ = from s in _context.Student
+            IQueryable<Student> studentIQ = from s in _context.Student.Include(s=>s.StudentStatus)
                                             select s;
             if (!String.IsNullOrEmpty(searchString))
             {

@@ -4,25 +4,26 @@
 @{
     ViewData["Title"] = "Index";
 }
+    
+<link rel="stylesheet" href="~/css/customTable.css" />
 
 <h1>Students</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a class="btn btn-primary" asp-page="Create">Create New</a>
 </p>
+<br />
 
 <form asp-page="./Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name:
-            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-page="./Index">Back to full List</a>
-        </p>
+    <div class="form-row form-group">
+        <p>Find by name: </p>
+        <input class="form-control col-3 ml-2 mr-2" type="text" name="SearchString" value="@Model.CurrentFilter" />
+        <input type="submit" value="Search" class="btn btn-primary btn-default mr-2" /> |
+        <a class="btn btn-info ml-2" asp-page="./Index">Back to full List</a>
     </div>
 </form>
 
-<table class="table">
+<table class="table table-hover table-striped table-bordered">
     <thead>
         <tr>
             <th>
@@ -34,7 +35,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Student[0].StudentStatus)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -50,11 +50,8 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.StudentStatus.Name)
                 </td>
-                <td>
-                    <a asp-page="./ChangeSchedule" asp-route-id="@item.StudentID">Change Schedule</a> |
-                    <a asp-page="./Edit" asp-route-id="@item.StudentID">Edit</a> |
+                <td hidden>
                     <a asp-page="./Details" asp-route-id="@item.StudentID">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.StudentID">Delete</a>
                 </td>
             </tr>
         }
@@ -80,3 +77,18 @@
    class="btn btn-default @nextDisabled">
     Next
 </a>
+
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+
+    $('tr').click(function() {
+        var href = $(this).find("a").attr("href");
+        if(href) {
+            window.location = href;
+        }
+    });
+
+});
+</script>

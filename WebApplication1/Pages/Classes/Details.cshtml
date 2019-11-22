@@ -28,65 +28,10 @@
 
 <div>
     <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@Model.ClassSchedule[0].Class.ClassID">Edit</a> |
+    <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@Model.ClassSchedule[0].Class.ClassID">Delete</a> |
     <a class="btn btn-warning" asp-page="/Assessments/Index" asp-route-id="@Model.ClassSchedule[0].Class.ClassID">Assessments</a> |
-    <a class="btn btn-success" onclick="toggleAddSchedule()">Add Schedule</a> |
-    <a asp-page="./Index">Back to List</a>
+    <a class="btn btn-info" asp-page="./Index">Back to List</a>
 </div>
-
-<br />
-
-<form id="AddSchedule" style="display:none;">
-    <div class="row">
-        <div class="col-5" style="border:solid; border-width: 1px; border-radius: 10px; border-color:lightslategrey;">
-            <h4>First Day</h4>
-            <div class="form-group">
-                <label asp-for="ClassSchedule[0].Schedule.DayOfWeek" class="control-label"></label>
-                <select class="form-control">
-                    <option value="1">Monday</option>
-                    <option value="2">Tuesday</option>
-                    <option value="3">Wednesday</option>
-                    <option value="4">Thursday</option>
-                    <option value="5">Friday</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClassSchedule[0].Schedule.StartTime" class="control-label"></label>
-                <input type="time" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="ClassSchedule[0].Schedule.EndTime" class="control-label"></label>
-                <input type="time" class="form-control" />
-            </div>
-        </div>
-        <div class="col-1"></div>
-        <div class="col-5" style="border:solid; border-width: 1px; border-radius: 10px; border-color:lightslategrey;">
-            <h4>Second Day</h4>
-            <div class="form-group">
-                <label asp-for="ClassSchedule[0].Schedule.DayOfWeek" class="control-label"></label>
-                <select class="form-control">
-                    <option value="1">Monday</option>
-                    <option value="2">Tuesday</option>
-                    <option value="3">Wednesday</option>
-                    <option value="4">Thursday</option>
-                    <option value="5">Friday</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClassSchedule[0].Schedule.StartTime" class="control-label"></label>
-                <input type="time" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="ClassSchedule[0].Schedule.EndTime" class="control-label"></label>
-                <input type="time" class="form-control" />
-            </div>
-        </div>
-    </div>
-    <br />
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
-    </div>
-</form>
-
 <br />
 
 <table class="table table-bordered" style="table-layout: fixed; width: 100%;">
@@ -128,15 +73,6 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
-        function toggleAddSchedule() {
-            var element = document.getElementById("AddSchedule");
-            if (element.style.display === "none") {
-                element.style.display = "block";
-            } else {
-                element.style.display = "none";
-            }
-        }
-
         function AddSchedule(schedule, className, tableColor) {
             var startTime = new Date(schedule.startTime);
             var endTime = new Date(schedule.endTime);

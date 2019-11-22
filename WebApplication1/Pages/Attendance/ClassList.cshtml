@@ -1,0 +1,105 @@
+﻿@page
+@model WebApplication1.Pages.Attendance.ClassListModel
+
+@{
+    ViewData["Title"] = "Class List";
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+@if (TempData.ContainsKey("Message"))
+{
+    <script>alert("Attendance has already been loaded for that class and day");</script>
+    @TempData.Remove("Message");
+}
+
+<body>
+    <h1>Your Classes</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Class[0].Course)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Class[0].Term)
+                </th>
+                <th>
+                    Last Attendance Entered
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Class)
+            {
+                bool attendanceFound = false;
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Course.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Term.Description)
+                    </td>
+                    @foreach (var attendance in Model.LastEnteredAttendance)
+                    {
+                        @if (attendance.ClassID == item.ClassID)
+                        {
+                            @if (attendance.Date != null)
+                            {
+                                attendanceFound = true;
+                                <td>@attendance.Date.ToString().Substring(0, 10)</td>
+                            }
+
+                        }
+                    }
+                    @if (!attendanceFound)
+                    {
+                        <td>No attendance data entered</td>
+                        <td>
+                            <input type="submit" class="btn btn-info" asp-page="./RunClassReport" asp-route-classId="@item.ClassID" value="Attendance Report" disabled />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <a class="btn btn-info" asp-page="./RunClassReport" asp-route-classId="@item.ClassID">Attendance Report</a>
+                        </td>
+                    }
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <br />
+    <br />
+
+    <form method="post" enctype="multipart/form-data" class="frame">
+        <div class="center">
+            <div class="title">
+                <h1 class="h1uploadbox" id="fileName">No File Selected</h1>
+            </div>
+
+            <div class="dropzone" id="fileInput">
+                <img src="http://100dayscss.com/codepen/upload.svg" class="upload-icon" />
+                <input type="file" name="postedFile" class="upload-input" />
+            </div>
+
+            <input type="submit" value="Upload File" class="submitformbtn" name="uploadbutton" asp-page-handler="Import" />
+
+        </div>
+    </form>
+
+</body>
+@section Scripts{
+    <script>
+        $('input[type="file"]').change(function (e) {
+            var fileName = e.target.files[0].name;
+            document.getElementById('fileName').innerText = fileName;
+        });
+    </script>
+}
+
+
+
