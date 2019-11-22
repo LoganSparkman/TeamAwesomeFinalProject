@@ -10,17 +10,16 @@
 <h1>Students</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a class="btn btn-primary" asp-page="Create">Create New</a>
 </p>
+<br />
 
 <form asp-page="./Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name:
-            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-page="./Index">Back to full List</a>
-        </p>
+    <div class="form-row form-group">
+        <p>Find by name: </p>
+        <input class="form-control col-3 ml-2 mr-2" type="text" name="SearchString" value="@Model.CurrentFilter" />
+        <input type="submit" value="Search" class="btn btn-primary btn-default mr-2" /> |
+        <a class="btn btn-info ml-2" asp-page="./Index">Back to full List</a>
     </div>
 </form>
 
