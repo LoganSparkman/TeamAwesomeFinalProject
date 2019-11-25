@@ -7,118 +7,117 @@
 
 <h1>Details</h1>
 
-<h4>Student</h4>
+<h4>@Model.Student.FirstName @Model.Student.LastName</h4>
 <hr />
 <form method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Student.StudentID" />
     <div class="row col-12">
-        <div class="col-4">
+        <div class="col-3">
             @{
                 if (Model.Student.Picture != null)
                 {
                     var base64 = Convert.ToBase64String(Model.Student.Picture);
                     var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-                    <img src="@imgsrc" style="display: block; margin: auto;" />
+                    <img src="@imgsrc" style="height:250px; width: 230px;" />
+                }
+                else
+                {
+                    <img src="~/blank_profile.jpg" style="height:250px; width: 230px;" />
                 }
             }
         </div>
-        <div class="col-8">
-            <div class="row">
-                <div class="form-group col-6">
-                    <label asp-for="Student.FirstName" class="control-label"></label>
-                    <input asp-for="Student.FirstName" readonly class="form-control" />
-                </div>
-                <div class="form-group col-6">
-                    <label asp-for="Student.LastName" class="control-label"></label>
-                    <input asp-for="Student.LastName" readonly class="form-control" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-4">
-                    <label asp-for="Student.DateOfBirth" class="control-label"></label>
-                    <input asp-for="Student.DateOfBirth" readonly class="form-control" />
-                </div>
-                <div class="form-group col-4">
-                    <label asp-for="Student.PublicSchoolLevel" class="control-label"></label>
-                    <input asp-for="Student.PublicSchoolLevel" readonly class="form-control" />
-                </div>
-                <div class="form-group col-4">
-                    <label asp-for="Student.Phone" class="control-label"></label>
-                    <input asp-for="Student.Phone" readonly class="form-control" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-6">
-                    <label asp-for="Student.GuardianName" class="control-label"></label>
-                    <input asp-for="Student.GuardianName" readonly class="form-control" />
-                </div>
-                <div class="form-group col-6">
-                    <label asp-for="Student.GuardianType" class="control-label"></label>
-                    <input asp-for="Student.GuardianType" readonly class="form-control" />
-                </div>
-            </div>
+        <div class="col-4">
+            <dl class="row">
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Student.DateOfBirth) :
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Student.DateOfBirth)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Student.Phone) :
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Student.Phone)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Student.GuardianName) :
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Student.GuardianName)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Student.GuardianType) :
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Student.GuardianType)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Student.Address) :
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Student.Address)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Student.Village) :
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Student.Village)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Student.GPSLatitude) :
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Student.GPSLatitude)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Student.GPSLongitude) :
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Student.GPSLongitude)
+                </dd>
+            </dl>
+        </div>
+        <div class="col-5">
+            <dl class="row">
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Student.StudentStatusID) :
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Student.StudentStatus.Name)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Student.PublicSchoolLevel) :
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Student.PublicSchoolLevel)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Student.EnglishLevel) :
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Student.EnglishLevel)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Student.ITLevel) :
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Student.ITLevel)
+                </dd>
+            </dl>
         </div>
     </div>
-    <div class="row col-12">
-        <div class="form-group col-4">
-            <label asp-for="Student.PublicSchoolLevel" class="control-label"></label>
-            <input asp-for="Student.PublicSchoolLevel" class="form-control" />
-            <span asp-validation-for="Student.PublicSchoolLevel" class="text-danger"></span>
-        </div>
-        <div class="form-group col-4">
-            <label asp-for="Student.EnglishLevel" class="control-label"></label>
-            <input asp-for="Student.EnglishLevel" class="form-control" />
-            <span asp-validation-for="Student.EnglishLevel" class="text-danger"></span>
-        </div>
-        <div class="form-group col-4">
-            <label asp-for="Student.ITLevel" class="control-label"></label>
-            <input asp-for="Student.ITLevel" class="form-control" />
-            <span asp-validation-for="Student.ITLevel" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="row col-12">
-        <div class="form-group col-5">
-            <label asp-for="Student.Address" class="control-label"></label>
-            <input asp-for="Student.Address" readonly class="form-control" />
-        </div>
-        <div class="form-group col-4">
-            <label asp-for="Student.Village" class="control-label"></label>
-            <input asp-for="Student.Village" readonly class="form-control" />
-        </div>
-    </div>
-    <div class="row col-12">
-        <div class="form-group col-4">
-            <label asp-for="Student.GPSLatitude" class="control-label"></label>
-            <input asp-for="Student.GPSLatitude" readonly class="form-control" />
-        </div>
-        <div class="form-group col-4">
-            <label asp-for="Student.GPSLongitude" class="control-label"></label>
-            <input asp-for="Student.GPSLongitude" readonly class="form-control" />
-        </div>
-    </div>
-    <div class="row col-12">
-        <div class="form-group col-5">
-            <label asp-for="Student.Picture" class="control-label"></label>
-            <div>
-                <input type="file" id="couponimage" disabled name="files" multiple class="form-control" />
-            </div>
-        </div>
-        <div class="form-group col-3">
-            <label asp-for="Student.StudentStatusID" class="control-label"></label>
-            <select asp-for="Student.StudentStatusID" disabled class="form-control" asp-items="ViewBag.StudentStatusID"></select>
-        </div>
-    </div>
+    <hr />
 </form>
 
 <div>
-    <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@Model.Student.StudentID">Edit</a> |
+    <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@Model.Student.StudentID">Edit </a> |
     <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@Model.Student.StudentID">Delete</a> |
     <a class="btn btn-warning" asp-page="/Notes/Index" asp-route-id="@Model.Student.StudentID">View Notes</a> |
     <a class="btn btn-success" asp-page="./ChangeSchedule" asp-route-id="@Model.Student.StudentID">Change Schedule</a> |
+    <a class="btn btn-secondary" asp-page="./AttendanceAnalysis" asp-route-studentid="@Model.Student.StudentID">Attendance Report</a>
     <a class="btn btn-info" asp-page="./Index">Back to List</a>
-
-
 </div>
 
 @section Scripts {
