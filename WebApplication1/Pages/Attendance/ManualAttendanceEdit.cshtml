@@ -1,0 +1,155 @@
+﻿@page
+@model WebApplication1.Pages.Attendance.ManualAttendanceEditModel
+@{
+    ViewData["Title"] = "ManualAttendanceEdit";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<p id="message"></p>
+<form method="post">
+    Date: <input type="text" id="datepicker" name="date">
+    <input type="hidden" name="classid" asp-for="@Model.classId" />
+    <input class="btn btn-primary" type="submit" value="Get Records" asp-page-handler="GetAttendance" />
+</form>
+
+<br />
+
+
+@if (Model.Student != null)
+{
+    @if (Model.Attendance.Count == 0)
+    {
+        <div><h4>No attendance data entered for @Model.Date</h4></div>
+        <br />
+    }
+
+    <table class="table" id="myTable">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+
+                <th>
+                    Status
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.Student)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+
+                    @if (Model.Attendance.Count == 0)
+                    {
+                        <td>
+                            <input type="hidden" name="id" asp-for="@item.StudentID" />
+                            <input type="hidden" name="date" asp-for="@Model.Date" />
+                            <button onclick="changeButtonText.call(this)" type="submit" class="btn btn-success">Attended</button>
+                        </td>
+                    }
+                    else
+                    {
+                        @foreach (var attendance in Model.Attendance)
+                        {
+                            @if (attendance.StudentID == item.StudentID)
+                            {
+                                @if (attendance.AttendanceStatusID == 1)
+                                {
+                                    <td>
+                                        <input type="hidden" name="id" asp-for="@item.StudentID" />
+                                        <input type="hidden" name="date" asp-for="@attendance.Date" />
+                                        <button onclick="changeButtonText.call(this)" type="submit" class="btn btn-success">Attended</button>
+
+                                    </td>
+                                }
+                                @if (attendance.AttendanceStatusID == 2)
+                                {
+                                    <td>
+                                        <input type="hidden" name="id" asp-for="@item.StudentID" />
+                                        <input type="hidden" name="date" asp-for="@attendance.Date" />
+                                        <button onclick="changeButtonText.call(this)" type="submit" class="btn btn-warning">Late</button>
+                                    </td>
+                                }
+                                @if (attendance.AttendanceStatusID == 3)
+                                {
+                                    <td>
+                                        <input type="hidden" name="id" asp-for="@item.StudentID" />
+                                        <input type="hidden" name="date" asp-for="@attendance.Date" />
+                                        <button onclick="changeButtonText.call(this)" type="submit" class="btn btn-danger">Absent</button>
+                                    </td>
+                                }
+                            }
+                        }
+                    }
+                </tr>
+
+            }
+
+
+        </tbody>
+    </table>
+}
+
+<div>
+    <a class="btn btn-info" asp-page="./ClassList">Back To Classes</a>
+</div>
+
+
+@section Scripts{
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#datepicker").datepicker();
+        });
+
+        $("#button1").click(function (e) {
+            if (isValidDate($("#datepicker").val()))
+                $("#message").html("Date validation passed");
+            else
+                $("#message").html("Date validation failed");
+        });
+
+        function isValidDate(date) {
+            var matches = /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/.exec(date);
+            if (matches == null) return false;
+            var d = matches[2];
+            var m = matches[1] - 1;
+            var y = matches[3];
+            var composedDate = new Date(y, m, d);
+            return composedDate.getDate() == d &&
+                composedDate.getMonth() == m &&
+                composedDate.getFullYear() == y;
+        }
+
+        var changeButtonText = function () {
+            if (this.innerHTML == "Attended") {
+                this.innerHTML = "Late";
+                this.className = "btn btn-warning";
+            }
+            else if (this.innerHTML == "Late") {
+                this.innerHTML = "Absent";
+                this.className = "btn btn-danger";
+            }
+            else if (this.innerHTML == "Absent") {
+                this.innerHTML = "Attended";
+                this.className = "btn btn-success";
+            }
+            getTableValues();
+        }
+
+        function getTableValues() {
+            var totalTdsInTable = $("#myTable td");
+        }
+    </script>
+
+}
+
