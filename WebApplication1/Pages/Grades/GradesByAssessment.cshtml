@@ -1,8 +1,80 @@
 ﻿@page
 @model WebApplication1.Pages.Grades.GradesByAssessmentModel
+
 @{
     ViewData["Title"] = "GradesByAssessment";
 }
 
-<h1>GradesByAssessment</h1>
+<h1>Grades List</h1>
 
+
+<div>
+    <h4>Assessment Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAssessment[0].Assessment.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentAssessment[0].Assessment.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAssessment[0].Assessment.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentAssessment[0].Assessment.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAssessment[0].Assessment.PointsPossible)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentAssessment[0].Assessment.PointsPossible)
+        </dd>
+    </dl>
+</div>
+<form method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.StudentAssessment[0].Student.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StudentAssessment[0].Student.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StudentAssessment[0].PointsAwarded)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StudentAssessment[0].Comment)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.StudentAssessment.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.StudentAssessment[i].Student.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.StudentAssessment[i].Student.LastName)
+                    </td>
+                    <input type="hidden" asp-for="@Model.StudentAssessment[i].StudentID" />
+                    <input type="hidden" asp-for="@Model.StudentAssessment[i].AssessmentID" />
+                    <td>
+                        <input class="form-control" asp-for="@Model.StudentAssessment[i].PointsAwarded" />
+                    </td>
+                    <td>
+                        <textarea class="form-control" asp-for="@Model.StudentAssessment[i].Comment"></textarea>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-2 offset-10">
+            <input class="btn btn-info form-control" type="submit" value="Save">
+        </div>
+    </div>
+</form>
