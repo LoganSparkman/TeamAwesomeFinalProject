@@ -49,6 +49,7 @@
 
                         }
                     }
+
                     @if (!attendanceFound)
                     {
                         <td>No attendance data entered</td>
@@ -62,6 +63,9 @@
                             <a class="btn btn-info" asp-page="./RunClassReport" asp-route-classId="@item.ClassID">Attendance Report</a>
                         </td>
                     }
+                    <td>
+                        <a class="btn btn-success" asp-page="./ManualAttendanceEdit" asp-route-classId="@item.ClassID">Manual Attendance Entry</a>
+                    </td>
 
                 </tr>
             }
@@ -89,6 +93,8 @@
 
 </body>
 @section Scripts{
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.8.23/jquery-ui.min.js" type="text/javascript"></script>
     <script>
         $('input[type="file"]').change(function (e) {
             var fileName = e.target.files[0].name;

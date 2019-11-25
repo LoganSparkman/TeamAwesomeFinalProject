@@ -102,6 +102,21 @@ h1 {
     color: #666;
 }
 
+h2 {
+    color: #666;
+    font-weight: 300;
+}
+
+h3 {
+    color: #666;
+    font-weight: 300;
+}
+
+h4 {
+    color: #666;
+    font-weight: 300;
+}
+
 .dropzone {
     width: 100px;
     height: 80px;

@@ -1,0 +1,46 @@
+﻿@page
+@model WebApplication1.Pages.Attendance.ManualAttendanceEditModel
+@{
+    ViewData["Title"] = "ManualAttendanceEdit";
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<p id="message"></p>
+<form method="post">
+    Date:<input type="text" id="datepicker" name="date">
+    <input class="btn btn-success" type="submit" value="Get Records" asp-page-handler="GetAttendance" />
+</form>
+
+
+    @section Scripts{
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#datepicker").datepicker();
+            });
+
+            $("#button1").click(function (e) {
+                if (isValidDate($("#datepicker").val()))
+                    $("#message").html("Date validation passed");
+                else
+                    $("#message").html("Date validation failed");
+            });
+
+            function isValidDate(date) {
+                var matches = /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/.exec(date);
+                if (matches == null) return false;
+                var d = matches[2];
+                var m = matches[1] - 1;
+                var y = matches[3];
+                var composedDate = new Date(y, m, d);
+                return composedDate.getDate() == d &&
+                    composedDate.getMonth() == m &&
+                    composedDate.getFullYear() == y;
+            }
+        </script>
+
+    }
+
