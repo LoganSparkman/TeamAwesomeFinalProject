@@ -22,6 +22,8 @@ namespace WebApplication1.Pages.Attendance
     {
         private readonly WebApplication1.Data.ApplicationDbContext _context;
 
+        public bool errorMessage { get; set; }
+
         public ClassListModel(WebApplication1.Data.ApplicationDbContext context)
         {
             _context = context;
@@ -60,7 +62,7 @@ namespace WebApplication1.Pages.Attendance
                     .ToListAsync();
         }
 
-        public async Task<IActionResult> OnPostImport(IFormFile postedFile)
+        public async Task OnPostImport(IFormFile postedFile)
         {
             if (postedFile != null)
             {
@@ -128,14 +130,38 @@ namespace WebApplication1.Pages.Attendance
                         }
                         catch (DbUpdateException)
                         {
-                            TempData["Message"] = "Error";
+                            errorMessage = true;
                         }
 
                         string test = ClassID.ToString() + " " + StudentID.ToString();
                     }
                 }
             }
-            return RedirectToPage("./ClassList");
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            string userId = claim.Value;
+
+            Class = await _context.Class.Include(c => c.Course).Include(c => c.Term).Where(u => u.ClassID == -1).ToListAsync();
+            IList<ClassInstructor> Classes = await _context.ClassInstructor
+                .Include(c => c.Class)
+                .Where(u => u.UserID == userId)
+                .ToListAsync();
+            //Class = new IList<Class>();
+            for (int i = 0; i < Classes.Count; i++)
+            {
+                Class.Add(await _context.Class
+                    .Include(c => c.Course)
+                    .Include(c => c.Term)
+                    .Where(c => c.ClassID == Classes[i].ClassID).FirstOrDefaultAsync());
+            }
+
+            //get the last entered attendance for classes
+            LastEnteredAttendance = await _context.Attendance
+                    .OrderByDescending(d => d.Date)
+                    .GroupBy(c => c.ClassID)
+                    .Select(c => c.First())
+                    .ToListAsync();
+
         }
     }
 }

@@ -7,6 +7,13 @@
 
 <link rel="stylesheet" href="~/css/site.css" />
 
+@if (Model.errorMessage)
+{
+    <script>
+        alert("You've already uploaded attendance for this day");
+        @Model.errorMessage = false;
+    </script>
+}
 
 <body>
     <h1>Your Classes</h1>
