@@ -35,7 +35,8 @@
                 @Html.DisplayFor(modelItem => item.Term.TermID)
             </td>
             <td>
-                <a asp-page="./StudentList" asp-route-classId="@item.ClassID">Students</a>
+                <a asp-page="./StudentList" asp-route-classId="@item.ClassID">Students</a> |
+                <a asp-page="./AssessmentList" asp-route-classId="@item.ClassID">Assessments</a>
             </td>
         </tr>
 }
