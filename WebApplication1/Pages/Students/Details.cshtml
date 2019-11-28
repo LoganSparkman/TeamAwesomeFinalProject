@@ -4,122 +4,192 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<link rel="stylesheet" href="~/css/customTable.css" />
 
 <h1>Details</h1>
 
 <h4>@Model.Student.FirstName @Model.Student.LastName</h4>
 <hr />
-<form method="post" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Student.StudentID" />
-    <div class="row col-12">
-        <div class="col-3">
-            @{
-                if (Model.Student.Picture != null)
-                {
-                    var base64 = Convert.ToBase64String(Model.Student.Picture);
-                    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-                    <img src="@imgsrc" style="height:250px; width: 230px;" />
-                }
-                else
-                {
-                    <img src="~/blank_profile.jpg" style="height:250px; width: 230px;" />
-                }
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input type="hidden" asp-for="Student.StudentID" />
+<div class="row col-12">
+    <div class="col-3">
+        @{
+            if (Model.Student.Picture != null)
+            {
+                var base64 = Convert.ToBase64String(Model.Student.Picture);
+                var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                <img src="@imgsrc" style="height:250px; width: 230px;" />
             }
-        </div>
-        <div class="col-4">
-            <dl class="row">
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Student.DateOfBirth) :
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Student.DateOfBirth)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Student.Phone) :
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Student.Phone)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Student.GuardianName) :
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Student.GuardianName)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Student.GuardianType) :
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Student.GuardianType)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Student.Address) :
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Student.Address)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Student.Village) :
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Student.Village)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Student.GPSLatitude) :
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Student.GPSLatitude)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Student.GPSLongitude) :
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Student.GPSLongitude)
-                </dd>
-            </dl>
-        </div>
-        <div class="col-5">
-            <dl class="row">
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Student.StudentStatusID) :
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Student.StudentStatus.Name)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Student.PublicSchoolLevel) :
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Student.PublicSchoolLevel)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Student.EnglishLevel) :
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Student.EnglishLevel)
-                </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Student.ITLevel) :
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Student.ITLevel)
-                </dd>
-            </dl>
-        </div>
+            else
+            {
+                <img src="~/blank_profile.jpg" style="height:250px; width: 230px;" />
+            }
+        }
     </div>
-    <hr />
-</form>
+    <div class="col-4">
+        <dl class="row">
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Student.DateOfBirth) :
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Student.DateOfBirth)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Student.Phone) :
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Student.Phone)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Student.GuardianName) :
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Student.GuardianName)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Student.GuardianType) :
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Student.GuardianType)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Student.Address) :
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Student.Address)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Student.Village) :
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Student.Village)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Student.GPSLatitude) :
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Student.GPSLatitude)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Student.GPSLongitude) :
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Student.GPSLongitude)
+            </dd>
+        </dl>
+    </div>
+    <div class="col-5">
+        <dl class="row">
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Student.StudentStatusID) :
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Student.StudentStatus.Name)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Student.PublicSchoolLevel) :
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Student.PublicSchoolLevel)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Student.EnglishLevel) :
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Student.EnglishLevel)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Student.ITLevel) :
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Student.ITLevel)
+            </dd>
+        </dl>
+    </div>
+</div>
+<hr />
+
 
 <div>
     <a class="btn btn-primary" asp-page="./Edit" asp-route-id="@Model.Student.StudentID">Edit </a> |
     <a class="btn btn-danger" asp-page="./Delete" asp-route-id="@Model.Student.StudentID">Delete</a> |
-    <a class="btn btn-warning" asp-page="/Notes/Index" asp-route-id="@Model.Student.StudentID">View Notes</a> |
+    <button class="btn btn-warning" id="note-toggle">View Notes</button> |
     <a class="btn btn-success" asp-page="./ChangeSchedule" asp-route-id="@Model.Student.StudentID">Change Schedule</a> |
-    <a class="btn btn-secondary" asp-page="./AttendanceAnalysis" asp-route-studentid="@Model.Student.StudentID">Attendance Report</a>
+    <a class="btn btn-secondary" asp-page="./AttendanceAnalysis" asp-route-studentid="@Model.Student.StudentID">Attendance Report</a> |
     <a class="btn btn-info" asp-page="./Index">Back to List</a>
+</div>
+<br />
+
+<div id="noteSection" class="d-none">
+    <p>
+        <a class="btn btn-primary" asp-page="/Notes/Create" asp-route-id="@Model.Student.StudentID">New Note <i class="fas fa-plus-circle"></i></a>
+    </p> 
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Note[0].Content)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Note[0].Student)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Note[0].IdentityUser)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Note[0].NoteType)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Note)
+            {
+                <tr>
+                    <td>
+                        @if (item.Content != null && item.Content.Length > 20)
+                        {
+                            @item.Content.ToString().Substring(0, 20)
+                            <text>...</text>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.Content)
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Student.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdentityUser.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NoteType.Name)
+                    </td>
+                    <td hidden>
+                        <a asp-page="/Notes/Details" asp-route-id="@item.NoteID">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $('tr').click(function() {
+                var href = $(this).find("a").attr("href");
+                if(href) {
+                    window.location = href;
+                }
+            });
+            $("#note-toggle").click(function (e) {
+                e.preventDefault();
+                $("#noteSection").toggleClass("d-none");
+            });
+        });
+    </script>
+
 }

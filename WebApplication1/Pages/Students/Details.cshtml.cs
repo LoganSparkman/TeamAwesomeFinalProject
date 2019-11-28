@@ -20,6 +20,7 @@ namespace WebApplication1.Pages.Students
         }
 
         public Student Student { get; set; }
+        public IList<Note> Note { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,6 +31,12 @@ namespace WebApplication1.Pages.Students
 
             Student = await _context.Student
                 .Include(s => s.StudentStatus).FirstOrDefaultAsync(m => m.StudentID == id);
+
+            Note = await _context.Note
+                .Include(n => n.NoteType)
+                .Include(n => n.Student)
+                .Where(n => n.StudentID == id).ToListAsync();
+
 
             if (Student == null)
             {
