@@ -67,7 +67,11 @@
                 {
                     <a class="list-group-item list-group-item-action bg-light" asp-area="" asp-page="/Attendance/ClassList">Attendance<i class="far fa-clock" style="position:absolute; right: 15px; top:14px;"></i></a>
                 }
-                <a class="list-group-item list-group-item-action bg-light" asp-area="" asp-page="/Index">Terms <i class="far fa-calendar-alt" style="position:absolute; right: 17px; top:14px;"></i></a>
+                @if (User.IsInRole(SD.AdminUser))
+                {
+                    <a class="list-group-item list-group-item-action bg-light" asp-area="" asp-page="/Attendance/ClassList">Admin Tools<i class="fas fa-briefcase" style="position:absolute; right: 15px; top:14px;"></i></a>
+                }
+                <a class="list-group-item list-group-item-action bg-light" asp-area="" asp-page="/Index">Terms <i class="far fa-calen dar-alt" style="position:absolute; right: 17px; top:14px;"></i></a>
             </div>
         </div>
         <div id="page-content-wrapper">
