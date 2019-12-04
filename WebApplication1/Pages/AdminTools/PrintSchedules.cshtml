@@ -3,9 +3,18 @@
 @{
     ViewData["Title"] = "PrintSchedules";
 }
-<div>
-    <button class="btn btn-success" onclick="PrintSchedule()">Print Schedules</button>
-</div>
+
+<form method="post">
+    <div class="form-group">
+        <h4>Select Term</h4>
+        <select asp-for="Term.TermID" name="termid" class="form-control" asp-items="ViewBag.TermID"></select>
+    </div>
+    <div class="row">
+        <input type="submit" value="Get Schedules" class="btn btn-primary ml-3 mr-2" /> 
+        <button class="btn btn-success ml-2" onclick="PrintSchedule()">Print Schedules</button>
+    </div>    
+</form>
+
 <br />
 
 @foreach (var s in Model.StudentSchedules)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
@@ -20,9 +21,17 @@ namespace WebApplication1.Pages.AdminTools
             _context = context;
         }
 
+        [BindProperty]
+        public Term Term { get; set; }
+
         public List<PrintStudentSchedules> StudentSchedules = new List<PrintStudentSchedules>();
 
-        public async Task OnGetAsync()
+        public void OnGet()
+        {
+            ViewData["TermID"] = new SelectList(_context.Term, "TermID", "Description");
+        }
+
+        public async Task OnPost(int termid)
         {
             IList<Student> StudentList = await _context.Student.Where(s => s.StudentStatusID == 2).ToListAsync();
 
@@ -30,13 +39,14 @@ namespace WebApplication1.Pages.AdminTools
             {
                 List<int> ClassList = await _context.StudentClass
                 .Where(s => s.StudentID == student.StudentID)
-                .Where(s => s.Class.TermID == 2)
+                .Where(s => s.Class.TermID == termid)
                 .Select(s => s.ClassID).ToListAsync();
 
                 //publicClassSchedules = await _context.PublicSchoolClassSchedule
                 //    .Include(p => p.Schedule)
                 //    .Include(p => p.StudentPublicSchoolClass)
                 //    .Where(p => p.StudentPublicSchoolClass.StudentID == id).ToListAsync
+
                 PrintStudentSchedules p = new PrintStudentSchedules();
                 p.Student = student;
                 p.Schedules = new List<ClassSchedule>();
@@ -50,8 +60,12 @@ namespace WebApplication1.Pages.AdminTools
                         .Where(c => c.ClassID == i).ToListAsync();
                     p.Schedules.AddRange(schedule);
                 }
-                StudentSchedules.Add(p);
+                if (p.Schedules.Count > 0)
+                {
+                    StudentSchedules.Add(p);
+                }
             }
+            ViewData["TermID"] = new SelectList(_context.Term, "TermID", "Description");
         }
     }
 }
