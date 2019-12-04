@@ -30,7 +30,7 @@ namespace WebApplication1.Pages.AdminTools
             {
                 List<int> ClassList = await _context.StudentClass
                 .Where(s => s.StudentID == student.StudentID)
-                .Where(s => s.Class.TermID == 1)
+                .Where(s => s.Class.TermID == 2)
                 .Select(s => s.ClassID).ToListAsync();
 
                 //publicClassSchedules = await _context.PublicSchoolClassSchedule
@@ -39,16 +39,18 @@ namespace WebApplication1.Pages.AdminTools
                 //    .Where(p => p.StudentPublicSchoolClass.StudentID == id).ToListAsync
                 PrintStudentSchedules p = new PrintStudentSchedules();
                 p.Student = student;
-                StudentSchedules.Add(p);
+                p.Schedules = new List<ClassSchedule>();
 
                 foreach (int i in ClassList)
                 {
                     List<ClassSchedule> schedule = await _context.ClassSchedule
                         .Include(c => c.Schedule)
                         .Include(c => c.Class)
+                        .Include(c => c.Class.Course)
                         .Where(c => c.ClassID == i).ToListAsync();
                     p.Schedules.AddRange(schedule);
                 }
+                StudentSchedules.Add(p);
             }
         }
     }

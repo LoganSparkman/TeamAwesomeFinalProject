@@ -3,10 +3,14 @@
 @{
     ViewData["Title"] = "PrintSchedules";
 }
+<div>
+    <button class="btn btn-success" onclick="PrintSchedule()">Print Schedules</button>
+</div>
+<br />
 
 @foreach (var s in Model.StudentSchedules)
 {
-    <h1>@s.Student.FirstName @s.Student.LastName</h1>
+    <h2>@s.Student.FirstName @s.Student.LastName</h2>
 
     <table class="table table-bordered" style="table-layout: fixed; width: 100%;">
         <thead>
@@ -25,19 +29,19 @@
                 {
                     <tr>
                         <th rowspan="2" scope="row">@i:00</th>
-                        <td id="1_@i"></td>
-                        <td id="2_@i"></td>
-                        <td id="3_@i"></td>
-                        <td id="4_@i"></td>
-                        <td id="5_@i"></td>
+                        <td id="@{@s.Student.StudentID}-1_@i"></td>
+                        <td id="@{@s.Student.StudentID}-2_@i"></td>
+                        <td id="@{@s.Student.StudentID}-3_@i"></td>
+                        <td id="@{@s.Student.StudentID}-4_@i"></td>
+                        <td id="@{@s.Student.StudentID}-5_@i"></td>
 
                     </tr>
                     <tr>
-                        <td id="1_2_@i"></td>
-                        <td id="2_2_@i"></td>
-                        <td id="3_2_@i"></td>
-                        <td id="4_2_@i"></td>
-                        <td id="5_2_@i"></td>
+                        <td id="@{@s.Student.StudentID}-1_2_@i"></td>
+                        <td id="@{@s.Student.StudentID}-2_2_@i"></td>
+                        <td id="@{@s.Student.StudentID}-3_2_@i"></td>
+                        <td id="@{@s.Student.StudentID}-4_2_@i"></td>
+                        <td id="@{@s.Student.StudentID}-5_2_@i"></td>
                     </tr>
                 }
             }
@@ -45,3 +49,64 @@
     </table>
     <footer style="page-break-after: always;"></footer>
 }
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+        function AddSchedule(student, schedule, className, tableColor) {
+            var startTime = new Date(schedule.startTime);
+            var endTime = new Date(schedule.endTime);
+            var dayOfWeek = schedule.dayOfWeek;
+            var rowspan = (endTime.getHours() - startTime.getHours()) * 2;
+
+            if (endTime.getMinutes() > 0) {
+                rowspan++;
+            }
+
+            var node = document.createElement("p");
+            var className = document.createTextNode(className);
+
+            node.appendChild(className);
+
+            var element = $('#' + student + '-' + dayOfWeek + '_' + startTime.getHours());
+            element.attr("rowspan", rowspan);
+            element.addClass(tableColor);
+            document.getElementById(student + '-' + dayOfWeek + '_' + startTime.getHours()).appendChild(node);
+
+            var elementToDelete = $('#' + student + '-' + dayOfWeek + '_2_' + startTime.getHours());
+            elementToDelete.remove();
+
+            var i = 2;
+            var count = startTime.getHours();
+            while (i < rowspan) {
+                count++;
+                var elementToDelete = $('#' + student + '-' + dayOfWeek + '_' + count);
+                elementToDelete.remove();
+
+                if (i + 2 < rowspan) {
+                    var elementToDelete = $('#' + student + '-' + dayOfWeek + '_2_' + count);
+                    elementToDelete.remove();
+                }
+
+                i++;
+            }
+        }
+
+        function PrintSchedule() {
+            window.print();
+        }
+    $(document).ready(function () {
+        var classSchedules = @Html.Raw(Json.Serialize(Model.StudentSchedules));
+        console.log(classSchedules);
+
+        classSchedules.forEach(function (classSchedule) {
+            var student = classSchedule.student.studentID;
+            var scheduleList = classSchedule.schedules;
+
+            scheduleList.forEach(function (sched){
+                var className = sched.class.course.name;
+                var schedule = sched.schedule;
+                AddSchedule(student, schedule, className, 'table-info');
+            });
+        });
+    });
+</script>
