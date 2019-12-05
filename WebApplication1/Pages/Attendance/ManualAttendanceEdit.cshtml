@@ -20,7 +20,7 @@
 {
     @if (Model.Attendance.Count == 0)
     {
-        <div><h4>No attendance data entered for @Model.Date</h4></div>
+        <div><h4>No attendance data entered for @Model.thisDate</h4></div>
         <br />
     }
 
@@ -50,7 +50,7 @@
                     {
                         <td>
                             <input type="hidden" name="id" asp-for="@item.StudentID" />
-                            <input type="hidden" name="date" asp-for="@Model.Date" />
+                            <input type="hidden" name="date" asp-for="@Model.thisDate" />
                             <button onclick="changeButtonText.call(this)" type="submit" class="btn btn-success">Attended</button>
                         </td>
                     }

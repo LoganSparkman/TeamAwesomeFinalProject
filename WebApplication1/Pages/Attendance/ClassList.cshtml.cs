@@ -79,9 +79,11 @@ namespace WebApplication1.Pages.Attendance
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                     int colCount = worksheet.Dimension.End.Column;  //get Column Count
                     int rowCount = worksheet.Dimension.End.Row;     //get row count
+                    bool endOfFile = false;
 
                     for (int row = 6; row <= rowCount; row++)
                     {
+                        
                         int StudentID = 0;
                         DateTime Date = new DateTime();
                         DateTime TimeIn = new DateTime();
@@ -95,6 +97,11 @@ namespace WebApplication1.Pages.Attendance
 
                             if(col == 1)
                             {
+                                if(worksheet.Cells[row, col].Value == null)
+                                {
+                                    endOfFile = true;
+                                    break;
+                                }
                                 StudentID = Int32.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
                             }
                             else if (col == 3)
@@ -119,25 +126,28 @@ namespace WebApplication1.Pages.Attendance
                                 } 
                             }
                         }
-                        tempAttendance.StudentID = StudentID;
-                        tempAttendance.Date = Date;
-                        tempAttendance.CourseName = CourseName;
+                        if (!endOfFile)
+                        {
+                            tempAttendance.StudentID = StudentID;
+                            tempAttendance.Date = Date;
+                            tempAttendance.CourseName = CourseName;
 
-                        if (AttendanceStatusID == 1)
-                        {
-                            tempAttendance.TimeIn = TimeIn;
-                        }
+                            if (AttendanceStatusID == 1)
+                            {
+                                tempAttendance.TimeIn = TimeIn;
+                            }
 
-                        tempAttendance.AttendanceStatusID = AttendanceStatusID;
-                        
-                        try
-                        {
-                            _context.Attendance.Add(tempAttendance);
-                            await _context.SaveChangesAsync();
-                        }
-                        catch (DbUpdateException)
-                        {
-                            errorMessage = true;
+                            tempAttendance.AttendanceStatusID = AttendanceStatusID;
+
+                            try
+                            {
+                                _context.Attendance.Add(tempAttendance);
+                                await _context.SaveChangesAsync();
+                            }
+                            catch (DbUpdateException)
+                            {
+                                errorMessage = true;
+                            }
                         }
                     }
                 }
@@ -146,11 +156,15 @@ namespace WebApplication1.Pages.Attendance
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             string userId = claim.Value;
 
+            Course = await _context.Course
+                     .ToListAsync();
+
             Class = await _context.Class.Include(c => c.Course).Include(c => c.Term).Where(u => u.ClassID == -1).ToListAsync();
             IList<ClassInstructor> Classes = await _context.ClassInstructor
                 .Include(c => c.Class)
                 .Where(u => u.UserID == userId)
                 .ToListAsync();
+
             //Class = new IList<Class>();
             for (int i = 0; i < Classes.Count; i++)
             {
