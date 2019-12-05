@@ -27,7 +27,12 @@ namespace WebApplication1.Pages.Attendance
 
         public Course Course { get; set; }
 
-        public string thisDate { get; set; }
+        public string ThisDate { get; set; }
+
+        public DateTime DayOne { get; set; }
+
+        public DateTime DayTwo { get; set; }
+
 
         private readonly WebApplication1.Data.ApplicationDbContext _context;
         public ManualAttendanceEditModel(WebApplication1.Data.ApplicationDbContext context)
@@ -44,7 +49,7 @@ namespace WebApplication1.Pages.Attendance
 
         public async Task OnPostGetAttendance(string date, int classid)
         {
-            thisDate = date;
+            ThisDate = date;
 
             DateTime Date = Convert.ToDateTime(date);
 
@@ -66,6 +71,7 @@ namespace WebApplication1.Pages.Attendance
                            .Where(c => c.ClassID == classid)
                            .ToListAsync();
 
+
             Student = await _context.Student.Where(u => u.StudentID == -1).ToListAsync();
 
             for (int i = 0; i < StudentClass.Count; i++)
@@ -78,6 +84,22 @@ namespace WebApplication1.Pages.Attendance
             Attendance = await _context.Attendance
                        .Where(c => c.Date >= firstDay).Where(c => c.Date <= lastDay).Where(c => c.CourseName == Course.Name)
                        .ToListAsync();
+
+            int count = 0;
+
+            foreach (var attend in Attendance)
+            {
+               
+                if (count == 0)
+                {
+                    DayOne = attend.Date;
+                }
+                else if(attend.Date != DayOne)
+                {
+                    DayTwo = attend.Date;
+                }
+                count++;
+            }
         }
 
     }
