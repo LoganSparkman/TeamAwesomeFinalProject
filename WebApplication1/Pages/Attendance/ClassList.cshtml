@@ -47,44 +47,48 @@
                         course = c;
                     }
                 }
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Course.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Term.Description)
-                    </td>
-                    @foreach (var attendance in Model.LastEnteredAttendance)
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Course.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Term.Description)
+                </td>
+                @foreach (var attendance in Model.LastEnteredAttendance)
+                {
+                    @if (attendance.CourseName == course.Name)
                     {
-                        @if (attendance.CourseName == course.Name)
+                        @if (attendance.Date != null)
                         {
-                            @if (attendance.Date != null)
-                            {
-                                attendanceFound = true;
-                                <td>@attendance.Date.ToString().Substring(0, 10)</td>
-                            }
-
+                            attendanceFound = true;
+                            <td>@attendance.Date.ToString().Substring(0, 10)</td>
                         }
-                    }
 
-                    @if (!attendanceFound)
-                    {
-                        <td>No attendance data entered</td>
-                        <td>
-                            <input type="submit" class="btn btn-info" asp-page="./RunClassReport" asp-route-classId="@item.ClassID" value="Attendance Report" disabled />
-                        </td>
                     }
-                    else
-                    {
-                        <td>
-                            <a class="btn btn-info" asp-page="./RunClassReport" asp-route-classId="@item.ClassID">Attendance Report</a>
-                        </td>
-                    }
+                }
+
+                @if (!attendanceFound)
+                {
+                    <td>No attendance data entered</td>
+                    <td>
+                        <input type="submit" class="btn btn-info" asp-page="./RunClassReport" asp-route-classId="@item.ClassID" value="Attendance Report" disabled />
+                    </td>
+                    <td>
+                        <input type="submit" class="btn btn-success" asp-page="./RunClassReport" asp-route-classId="@item.ClassID" value="Manual Attendance" disabled />
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <a class="btn btn-info" asp-page="./RunClassReport" asp-route-classId="@item.ClassID">Attendance Report</a>
+                    </td>
                     <td>
                         <a class="btn btn-success" asp-page="./ManualAttendanceEdit" asp-route-classId="@item.CourseID">Manual Attendance Entry</a>
                     </td>
+                }
 
-                </tr>
+
+            </tr>
             }
         </tbody>
     </table>

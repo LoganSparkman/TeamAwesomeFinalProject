@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace WebApplication1.Pages.Attendance
 {
@@ -130,6 +131,51 @@ namespace WebApplication1.Pages.Attendance
 
         public static DateTime FirstDayOfNextMonth(this DateTime dt) =>
             dt.FirstDayOfMonth().AddMonths(1);
+    }
+
+    public class ChatHub : Hub
+    {
+        public Models.Attendance Attendance { get; set; }
+
+        private readonly WebApplication1.Data.ApplicationDbContext _context;
+        public ChatHub(WebApplication1.Data.ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task ChangeAttendance(string attendanceStatus, string studentid, string coursename, string date)
+        {
+            DateTime Date = Convert.ToDateTime(date);
+            int StudentId = Int32.Parse(studentid);
+
+            Attendance = await _context.Attendance
+                        .Where(a => a.Date == Date).Where(a => a.StudentID == StudentId).Where(a => a.CourseName == coursename).FirstOrDefaultAsync();
+
+            if(attendanceStatus == "Attended")
+            {
+                Attendance.AttendanceStatusID = 1;
+            }
+            else if (attendanceStatus == "Late")
+            {
+                Attendance.AttendanceStatusID = 2;
+            }
+            if (attendanceStatus == "Absent")
+            {
+                Attendance.AttendanceStatusID = 3;
+            }
+
+            _context.Attach(Attendance).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+            }
+
+                await Clients.Client(Context.ConnectionId).SendAsync("AttendanceChanged", "Success");
+        }
     }
 
 }

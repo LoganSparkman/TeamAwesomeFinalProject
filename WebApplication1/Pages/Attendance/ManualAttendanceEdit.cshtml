@@ -23,99 +23,101 @@
         <div><h4>No attendance data entered for @Model.ThisDate</h4></div>
         <br />
     }
+    else
+    {
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
 
-    <table class="table" id="myTable">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
+                    <th>
+                        @Model.DayOne.ToString().Substring(0, 10)
+                    </th>
+                    <th>
+                        @Model.DayTwo.ToString().Substring(0, 10)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
 
-                <th>
-                    @Model.DayOne.ToString().Substring(0, 10)
-                </th>
-                <th>
-                    @Model.DayTwo.ToString().Substring(0, 10)
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @foreach (var item in Model.Student)
-            {
-                int attendanceCount = 0;
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-
-                @if (Model.Attendance.Count == 0)
+                @foreach (var item in Model.Student)
                 {
-                    <td>
-                        <input type="hidden" name="id" asp-for="@item.StudentID" />
-                        <input type="hidden" name="date" asp-for="@Model.ThisDate" />
-                        <button onclick="changeButtonText.call(this)" type="submit" class="btn btn-success">Attended</button>
-                    </td>
-                }
-                else
-                {
-                    @foreach (var attendance in Model.Attendance)
-                    {
-                        @if (attendance.StudentID == item.StudentID)
+                    int attendanceCount = 0;
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+
+                        @if (Model.Attendance.Count == 0)
                         {
-                            @if (attendance.AttendanceStatusID == 1)
+                            <td>
+                                <input type="hidden" name="id" asp-for="@item.StudentID" />
+                                <input type="hidden" name="date" asp-for="@Model.ThisDate" />
+                                <button onclick="changeButtonText.call(this)" type="submit" class="btn btn-success">Attended</button>
+                            </td>
+                        }
+                        else
+                        {
+                            @foreach (var attendance in Model.Attendance)
                             {
-                                attendanceCount++;
-                                <td>
-                                    <input type="hidden" name="id" asp-for="@item.StudentID" />
-                                    <input type="hidden" name="date" asp-for="@attendance.Date" />
-                                    <button onclick="changeButtonText.call(this)" type="submit" class="btn btn-success">Attended</button>
+                                @if (attendance.StudentID == item.StudentID)
+                                {
+                                    @if (attendance.AttendanceStatusID == 1)
+                                    {
+                                        attendanceCount++;
+                                        <td>
+                                            <input type="hidden" name="id" asp-for="@item.StudentID" />
+                                            <input type="hidden" name="date" asp-for="@attendance.Date" />
+                                            <button onclick="changeButtonText.call(this)" data-value="@item.StudentID" data-value2="@Model.Course.Name" value="@attendance.Date" type="submit" class="btn btn-success">Attended</button>
 
-                                </td>
+                                        </td>
+                                    }
+                                    @if (attendance.AttendanceStatusID == 2)
+                                    {
+                                        attendanceCount++;
+                                        <td>
+                                            <input type="hidden" name="id" asp-for="@item.StudentID" />
+                                            <input type="hidden" name="date" asp-for="@attendance.Date" />
+                                            <button onclick="changeButtonText.call(this)" data-value="@item.StudentID" data-value2="@Model.Course.Name" value="@attendance.Date" type="submit" class="btn btn-warning">Late</button>
+                                        </td>
+                                    }
+                                    @if (attendance.AttendanceStatusID == 3)
+                                    {
+                                        attendanceCount++;
+                                        <td>
+                                            <input type="hidden" name="id" asp-for="@item.StudentID" />
+                                            <input type="hidden" name="date" asp-for="@attendance.Date" />
+                                            <button onclick="changeButtonText.call(this)" data-value="@item.StudentID" data-value2="@Model.Course.Name" value="@attendance.Date" type="submit" class="btn btn-danger">Absent</button>
+                                        </td>
+                                    }
+                                }
                             }
-                            @if (attendance.AttendanceStatusID == 2)
+                        }
+                        @if (attendanceCount < 2)
+                        {
+                            while (attendanceCount < 2)
                             {
                                 attendanceCount++;
                                 <td>
                                     <input type="hidden" name="id" asp-for="@item.StudentID" />
-                                    <input type="hidden" name="date" asp-for="@attendance.Date" />
-                                    <button onclick="changeButtonText.call(this)" type="submit" class="btn btn-warning">Late</button>
-                                </td>
-                            }
-                            @if (attendance.AttendanceStatusID == 3)
-                            {
-                                attendanceCount++;
-                                <td>
-                                    <input type="hidden" name="id" asp-for="@item.StudentID" />
-                                    <input type="hidden" name="date" asp-for="@attendance.Date" />
+                                    @if (attendanceCount == 0)
+                                    {
+                                        <input type="hidden" name="date" />
+                                    }
                                     <button onclick="changeButtonText.call(this)" type="submit" class="btn btn-danger">Absent</button>
                                 </td>
                             }
                         }
-                    }
+                    </tr>
+
                 }
-                @if (attendanceCount < 2)
-                {
-                    while (attendanceCount < 2)
-                    {
-                        attendanceCount++;
-                        <td>
-                            <input type="hidden" name="id" asp-for="@item.StudentID" />
-                            @if(attendanceCount == 0)
-                            {
-                                <input type="hidden" name="date"/>
-                            }
-                            <button onclick="changeButtonText.call(this)" type="submit" class="btn btn-danger">Absent</button>
-                        </td>
-                    }
-                }
-            </tr>
-
-            }
 
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    }
 }
 
 <div>
@@ -155,20 +157,35 @@
             if (this.innerHTML == "Attended") {
                 this.innerHTML = "Late";
                 this.className = "btn btn-warning";
+                changeAttendance(this.innerHTML, this.getAttribute("data-value"), this.getAttribute("data-value2"), this.value);
             }
             else if (this.innerHTML == "Late") {
                 this.innerHTML = "Absent";
                 this.className = "btn btn-danger";
+                changeAttendance(this.innerHTML, this.getAttribute("data-value"), this.getAttribute("data-value2"), this.value);
             }
             else if (this.innerHTML == "Absent") {
                 this.innerHTML = "Attended";
                 this.className = "btn btn-success";
+                changeAttendance(this.innerHTML, this.getAttribute("data-value"), this.getAttribute("data-value2"), this.value);
             }
-            getTableValues();
         }
 
-        function getTableValues() {
-            var totalTdsInTable = $("#myTable td");
+    </script>
+    <script src="~/lib/dist/browser/signalr.js"></script>
+
+    <script>
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+        connection.start();
+
+        function changeAttendance(attendanceStatus, studentid, coursename, date) {
+            connection.invoke("ChangeAttendance", attendanceStatus, studentid, coursename, date).catch(function (err) {
+                    return console.error(err.toString());
+            });
+
+            connection.on("AttendanceChanged", function (message) {
+                console.log(message);
+            });
         }
     </script>
 
