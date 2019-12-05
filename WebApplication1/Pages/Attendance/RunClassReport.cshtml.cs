@@ -37,9 +37,7 @@ namespace WebApplication1.Pages.Attendance
                     .Where(c => c.ClassID == classId)
                     .ToListAsync();
 
-            /*Attendance = await _context.Attendance
-                         .Where(c => c.ClassID == classId)
-                         .ToListAsync();*/
+        
 
             for(int i = 0; i < Class.Count; i++)
             {
@@ -47,6 +45,10 @@ namespace WebApplication1.Pages.Attendance
                         .Where(c => c.CourseID == Class[i].CourseID)
                         .FirstOrDefaultAsync();
             }
+
+            Attendance = await _context.Attendance
+                         .Where(c => c.CourseName == Course.Name)
+                         .ToListAsync();
 
             foreach (var attendance in Attendance)
             {
