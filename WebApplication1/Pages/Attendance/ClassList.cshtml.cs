@@ -14,6 +14,7 @@ using WebApplication1.Utility;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace WebApplication1.Pages.Attendance
 {
@@ -30,6 +31,9 @@ namespace WebApplication1.Pages.Attendance
         }
 
         public IList<Class> Class { get; set; }
+
+        public IList<Course> Course { get; set; }
+
         public IList<Models.Attendance> LastEnteredAttendance { get; set; }
 
         public IList<Models.Attendance> Attendance { get; set; }
@@ -40,11 +44,15 @@ namespace WebApplication1.Pages.Attendance
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             string userId = claim.Value;
 
+            Course = await _context.Course
+                     .ToListAsync();
+
             Class = await _context.Class.Include(c => c.Course).Include(c => c.Term).Where(u => u.ClassID == -1).ToListAsync();
             IList<ClassInstructor> Classes = await _context.ClassInstructor
                 .Include(c => c.Class)
                 .Where(u => u.UserID == userId)
                 .ToListAsync();
+            
             //Class = new IList<Class>();
             for (int i = 0; i < Classes.Count; i++)
             {
@@ -57,7 +65,7 @@ namespace WebApplication1.Pages.Attendance
             //get the last entered attendance for classes
             LastEnteredAttendance = await _context.Attendance
                     .OrderByDescending(d => d.Date)
-                    .GroupBy(c => c.ClassID)
+                    .GroupBy(c => c.CourseName)
                     .Select(c => c.First())
                     .ToListAsync();
         }
@@ -72,13 +80,12 @@ namespace WebApplication1.Pages.Attendance
                     int colCount = worksheet.Dimension.End.Column;  //get Column Count
                     int rowCount = worksheet.Dimension.End.Row;     //get row count
 
-                    for (int row = 1; row <= rowCount; row++)
+                    for (int row = 6; row <= rowCount; row++)
                     {
-                        int ClassID = 0;
                         int StudentID = 0;
                         DateTime Date = new DateTime();
                         DateTime TimeIn = new DateTime();
-                        DateTime TimeOut = new DateTime();
+                        string CourseName = "";
                         int AttendanceStatusID = 1;
                         Models.Attendance tempAttendance = new Models.Attendance();
 
@@ -88,41 +95,41 @@ namespace WebApplication1.Pages.Attendance
 
                             if(col == 1)
                             {
-                                ClassID = Int32.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
-                            }
-                            else if (col == 2)
-                            {
                                 StudentID = Int32.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
                             }
                             else if (col == 3)
                             {
-                                Date = DateTime.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
+                                CourseName = worksheet.Cells[row, col].Value?.ToString().Trim();
                             }
                             else if (col == 4)
                             {
-                                string tempDate = worksheet.Cells[row, col].Value?.ToString().Trim();
-                                double date = double.Parse(tempDate);
-                                TimeIn = DateTime.FromOADate(date);
-                            }
-                            else if (col == 5)
-                            {
-                                string tempDate = worksheet.Cells[row, col].Value?.ToString().Trim();
-                                double date = double.Parse(tempDate);
-                                TimeOut = DateTime.FromOADate(date);
+                                Date = DateTime.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
                             }
                             else if (col == 6)
                             {
-                                AttendanceStatusID = Int32.Parse(worksheet.Cells[row, col].Value?.ToString().Trim());
+                                string tempDate = worksheet.Cells[row, col].Value?.ToString().Trim();
+                                if(tempDate == "Missed")
+                                {
+                                    AttendanceStatusID = 3;
+                                }
+                                else
+                                {
+                                    TimeIn = Convert.ToDateTime(tempDate);
+                                    AttendanceStatusID = 1;
+                                } 
                             }
-
                         }
-                        tempAttendance.ClassID = ClassID;
                         tempAttendance.StudentID = StudentID;
                         tempAttendance.Date = Date;
-                        tempAttendance.TimeIn = TimeIn;
-                        tempAttendance.TimeOut = TimeOut;
-                        tempAttendance.AttendanceStatusID = AttendanceStatusID;
+                        tempAttendance.CourseName = CourseName;
 
+                        if (AttendanceStatusID == 1)
+                        {
+                            tempAttendance.TimeIn = TimeIn;
+                        }
+
+                        tempAttendance.AttendanceStatusID = AttendanceStatusID;
+                        
                         try
                         {
                             _context.Attendance.Add(tempAttendance);
@@ -132,8 +139,6 @@ namespace WebApplication1.Pages.Attendance
                         {
                             errorMessage = true;
                         }
-
-                        string test = ClassID.ToString() + " " + StudentID.ToString();
                     }
                 }
             }
@@ -158,7 +163,7 @@ namespace WebApplication1.Pages.Attendance
             //get the last entered attendance for classes
             LastEnteredAttendance = await _context.Attendance
                     .OrderByDescending(d => d.Date)
-                    .GroupBy(c => c.ClassID)
+                    .GroupBy(c => c.CourseName)
                     .Select(c => c.First())
                     .ToListAsync();
 

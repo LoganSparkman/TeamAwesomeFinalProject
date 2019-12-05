@@ -38,6 +38,15 @@
             @foreach (var item in Model.Class)
             {
                 bool attendanceFound = false;
+                WebApplication1.Models.Course course = Model.Course[0];
+
+                @foreach(var c in Model.Course)
+                {
+                    @if(c.CourseID == item.CourseID)
+                    {
+                        course = c;
+                    }
+                }
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Course.Name)
@@ -47,7 +56,7 @@
                     </td>
                     @foreach (var attendance in Model.LastEnteredAttendance)
                     {
-                        @if (attendance.ClassID == item.ClassID)
+                        @if (attendance.CourseName == course.Name)
                         {
                             @if (attendance.Date != null)
                             {

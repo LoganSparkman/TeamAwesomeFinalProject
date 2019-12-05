@@ -13,10 +13,8 @@ namespace WebApplication1.Models
         [Required]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
-        [Required]
+
         public DateTime TimeIn { get; set; }
-        [Required]
-        public DateTime TimeOut { get; set; }
 
         [Display(Name = "Student")]
         [Required]
@@ -24,11 +22,9 @@ namespace WebApplication1.Models
         [ForeignKey("StudentID")]
         public virtual Student Student { get; set; }
 
-        [Display(Name = "Class")]
+        [Display(Name = "Course")]
         [Required]
-        public int ClassID { get; set; }
-        [ForeignKey("ClassID")]
-        public virtual Class Class { get; set; }
+        public string CourseName { get; set; }
 
         [Display(Name = "AttendanceStatus")]
         [Required]

@@ -17,6 +17,10 @@ namespace WebApplication1.Pages.Attendance
 
         public IList<StudentClass> StudentClass { get; set; }
 
+        public ClassSchedule ClassSchedule { get; set; }
+
+        public IList<Schedule> Schedule { get; set; }
+
         public string Date { get; set; }
 
         private readonly WebApplication1.Data.ApplicationDbContext _context;
@@ -49,9 +53,9 @@ namespace WebApplication1.Pages.Attendance
                     .Where(s => s.StudentID == StudentClass[i].StudentID).FirstOrDefaultAsync());
             }
 
-            Attendance = await _context.Attendance
+            /*Attendance = await _context.Attendance
                         .Where(c => c.ClassID == classid && c.Date == d)
-                        .ToListAsync();
+                        .ToListAsync();*/
 
         }
     }
