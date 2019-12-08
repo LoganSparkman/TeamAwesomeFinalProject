@@ -1,0 +1,37 @@
+﻿@page
+@model WebApplication1.Pages.Classes.RunClassReportModel
+@{
+    ViewData["Title"] = "Class Report";
+}
+
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Attendance'],
+          ['Attended',     @Model.attended],
+          ['Absent',      @Model.absent],
+          ['Late',  @Model.late],
+        ]);
+
+        var options = {
+          title: 'Attendance Report For @Model.Course.Name',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+    </script>
+</head>
+<body>
+    <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+    <div>
+        <a class="btn btn-info" asp-page="./ClassList">Back To Classes</a>
+    </div>
+</body>
+
+
