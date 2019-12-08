@@ -33,7 +33,8 @@
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                <a asp-page="./GradesList" asp-route-studentId="@item.StudentID" asp-route-classId="@Model.classId">Grades</a>
+                <a asp-page="./GradesList" asp-route-studentId="@item.StudentID" asp-route-classId="@Model.classId">Grades</a> |
+                <a asp-page="./StudentGraphs" asp-route-studentId="@item.StudentID" asp-route-classId="@Model.classId">Graphs</a>
             </td>
         </tr>
 }
