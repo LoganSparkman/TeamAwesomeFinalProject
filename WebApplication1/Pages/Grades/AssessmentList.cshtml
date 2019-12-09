@@ -40,7 +40,8 @@
             <td>
                 <a asp-page="../Assessments/Edit" asp-route-id="@item.AssessmentId">Edit</a> |
                 <a asp-page="../Assessments/Details" asp-route-id="@item.AssessmentId">Details</a> |
-                <a asp-page="./GradesByAssessment" asp-route-AssessmentId="@item.AssessmentId">Grades</a>
+                <a asp-page="./GradesByAssessment" asp-route-AssessmentId="@item.AssessmentId">Grades</a> |
+                <a asp-page="./AssessmentGraphs" asp-route-AssessmentId="@item.AssessmentId">Graphs</a>
             </td>
         </tr>
 }

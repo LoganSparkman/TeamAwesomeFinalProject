@@ -6,6 +6,7 @@
 }
 
 <h1>Your Classes</h1>
+<a asp-page="./Graph">Graphs</a>
 
 <table class="table">
     <thead>
@@ -36,7 +37,8 @@
             </td>
             <td>
                 <a asp-page="./StudentList" asp-route-classId="@item.ClassID">Students</a> |
-                <a asp-page="./AssessmentList" asp-route-classId="@item.ClassID">Assessments</a>
+                <a asp-page="./AssessmentList" asp-route-classId="@item.ClassID">Assessments</a> |
+                <a asp-page="./ClassGraphs" asp-route-classId="@item.ClassID">Class Graphs</a>
             </td>
             <td>
                 <a class="btn btn-info" asp-page="./GradesByClassReport" asp-route-classId="@item.ClassID">Grades Report</a>
