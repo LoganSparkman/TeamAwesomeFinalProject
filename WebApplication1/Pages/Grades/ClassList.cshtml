@@ -38,6 +38,9 @@
                 <a asp-page="./StudentList" asp-route-classId="@item.ClassID">Students</a> |
                 <a asp-page="./AssessmentList" asp-route-classId="@item.ClassID">Assessments</a>
             </td>
+            <td>
+                <a class="btn btn-info" asp-page="./GradesByClassReport" asp-route-classId="@item.ClassID">Grades Report</a>
+            </td>
         </tr>
 }
     </tbody>
