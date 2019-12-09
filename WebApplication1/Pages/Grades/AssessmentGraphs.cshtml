@@ -1,0 +1,93 @@
+﻿@page
+@model WebApplication1.Pages.Grades.AssessmentGraphsModel
+
+@{
+    ViewData["Title"] = "AssessmentGraphs";
+}
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Task', 'Hours per Day'],
+                ['<60', @Model._LessThan60Count],
+                ['60-70', @Model._60_70Count],
+                ['70-80', @Model._70_80Count],
+                ['80-90', @Model._80_90Count],
+                ['90-100', @Model._90_100Count]
+            ]);
+
+            var options = {
+                title: 'Grade Distribution'
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(data, options);
+
+            var data = google.visualization.arrayToDataTable([
+                ["Element", "Density", { role: "style" }],
+                ["<60", @Model._LessThan60Count, "blue"],
+                ["60-70", @Model._60_70Count, "red"],
+                ["70-80", @Model._70_80Count, "blue"],
+                ["80-90", @Model._80_90Count, "red"],
+                ["70-80", @Model._90_100Count, "blue"]
+
+            ]);
+
+            var view = new google.visualization.DataView(data);
+            view.setColumns([0, 1,
+                {
+                    calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation"
+                },
+                2]);
+
+            var options = {
+                title: "Grade Distribution",
+                width: 600,
+                height: 400,
+                bar: { groupWidth: "95%" },
+                legend: { position: "none" },
+            };
+            var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+            chart.draw(view, options);
+        }
+    </script>
+</head>
+
+<div>
+    <h4>Assessment Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAssessment[0].Assessment.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentAssessment[0].Assessment.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAssessment[0].Assessment.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentAssessment[0].Assessment.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentAssessment[0].Assessment.PointsPossible)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StudentAssessment[0].Assessment.PointsPossible)
+        </dd>
+    </dl>
+</div>
+<h1>AssessmentGraphs</h1>
+<div id="piechart" style="width: 900px; height: 500px;"></div>
+<div id="columnchart_values" style="width: 900px; height: 300px;"></div>
+<br />
+<br />

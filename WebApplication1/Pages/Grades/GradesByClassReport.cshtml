@@ -1,0 +1,84 @@
+﻿@page
+@model WebApplication1.Pages.Grades.GradesByClassReportModel
+@{
+    ViewData["Title"] = "Grades by Class Report";
+}
+
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+
+
+        function drawChart() {
+            
+            var chartData = new google.visualization.arrayToDataTable([
+                ['Student', 'Grade'],
+                ['first student', 94],
+                ['second student', 84],
+                ['third student', 1]
+            ]);
+            
+        
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'Student');
+          data.addColumn('number', 'Grade');
+
+          let names = []
+          let scores = []
+
+          @{ int j = 0; }
+
+            for (var j = 0; j < @Model.FirstNames.Length; j++) {
+                names[j] = ('@Model.FirstNames[j]' + " " + '@Model.LastNames[j]');
+              @{ j++;}
+          }
+            
+
+
+          @{ int i = 0;}
+
+          for (var i = 0; i < @Model.StudentScores.Length; i++) {
+              scores[i] = @Model.StudentScores[i];
+              @{ i++;}
+            }
+
+            for (var z = 0; z < names.length; z++){
+                data.addRow([names[z], scores[z]]);
+            }
+
+
+           @{ int x = 0;}
+         // for (let i = 0; i < @Model.StudentScores.Length; i++)
+         // {
+          //    data.addRow(['@Model.FirstNames[x]', @Model.StudentScores[x]]);
+              @{ x++;}
+          //}
+       
+              var options = {
+                    title: 'Student Grades For @Model.Course.Name',
+            };
+            var options1 = {
+                title: 'What chart should look like',
+            };
+
+              var chart = new google.visualization.ScatterChart(document.getElementById('columnchart_values'));
+            chart.draw(data, options);
+            var chart = new google.visualization.ScatterChart(document.getElementById('SecondChart'));
+            chart.draw(chartData, options1);
+
+      }
+    </script>
+</head>
+<body>
+    <div id="columnchart_values" style="width: 900px; height: 500px;"></div>
+
+    <div id="SecondChart" style="width: 900px; height: 500px;"></div>
+    <div>
+            <a class="btn btn-info" asp-page="./ClassList">Back To Classes</a>
+        </div>
+</body>
+
+
