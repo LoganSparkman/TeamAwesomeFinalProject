@@ -10,7 +10,7 @@ namespace WebApplication1.Models
     public class StudentAssessment
     {
 
-        
+
         public int PointsAwarded { get; set; }
         [StringLength(5000)]
         public string Comment { get; set; }

@@ -1,0 +1,38 @@
+﻿@page
+@model WebApplication1.Pages.Assessments.RunAssessmentReportModel
+@{
+    ViewData["Title"] = "Assessment Report";
+}
+
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Assessment'],
+            ['Student Name',     @Model.studentFirstName + ' ' + @Model.studentLastName],
+            ['Points awarded',      @Model.pointsAwarded]
+        ]);
+
+        var options = {
+            title: 'Attendance Report For',
+            legend: { position: 'none' },
+            histogram: { bucketSize: 5 }
+        };
+
+        var chart = new google.visualization.Histogram(document.getElementById('container'));
+        chart.draw(data, options);
+    }
+
+    </script>
+</head>
+<body>
+    <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+    <div>
+        <a class="btn btn-info" asp-page="./ClassList">Back To Classes</a>
+    </div>
+</body>
+
+
